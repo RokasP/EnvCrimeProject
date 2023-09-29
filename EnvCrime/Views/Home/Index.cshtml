@@ -1,6 +1,4 @@
-﻿@model IEnvCrimeRepository
-
-@{
+﻿@{
 	Layout = "_Public";
 	ViewBag.ShowSideColumn = true;
 }
@@ -42,21 +40,3 @@
 		<input class="button" type="submit" value="Skicka in" />
 	</p>
 </form>
-
-<table>
-	<tr>
-		<th>Employee Id</th>
-		<th>Employee Name</th>
-		<th>Employee Role Title</th>
-		<th>Employee Department Id</th>
-	</tr>
-	@foreach (var employee in Model.Employees)
-	{
-		<tr>
-			<td>@employee.EmployeeId</td>
-			<td>@employee.EmployeeName</td>
-			<td>@employee.RoleTitle</td>
-			<td>@employee.DepartmentId</td>
-		</tr>
-	}
-</table>

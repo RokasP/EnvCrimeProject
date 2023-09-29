@@ -1,10 +1,7 @@
-using EnvCrime.Models;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddTransient<IEnvCrimeRepository, FakeRepository>();
 
 var app = builder.Build();
 
