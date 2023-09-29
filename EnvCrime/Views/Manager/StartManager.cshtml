@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnvCrimeRepository
+
+@{
     Layout = "_ManagerNavigation";
 }
 
@@ -17,19 +19,27 @@
         <td>
             <select name="status">
                 <option selected="selected">Välj alla</option>
-                <option value="stat0">Inrapporterad</option>
+                @* <option value="stat0">Inrapporterad</option>
                 <option value="stat1">Ingen åtgärd</option>
                 <option value="stat2">Påbörjad</option>
-                <option value="stat3">Klar</option>
+                <option value="stat3">Klar</option> *@
+                @foreach (var status in Model.ErrandStatuses)
+                {
+                    <option value="@status.StatusId">@status.StatusName</option>
+                }
             </select>
         </td>
         <td>
             <select name="investigator">
                 <option selected="selected">Välj alla</option>
-                <option value="inv0">Martin Kvist</option>
+                @* <option value="inv0">Martin Kvist</option>
                 <option value="inv1">Lena Larsson</option>
                 <option value="inv2">Oskar Ivarsson</option>
-                <option value="inv3">Susanne Fred</option>
+                <option value="inv3">Susanne Fred</option> *@
+                @foreach (var employee in Model.Employees)
+                {
+                    <option value="@employee.EmployeeId">@employee.EmployeeName</option>
+                }
             </select>
         </td>
         <td><input class="button" type="submit" value="Hämta lista" /></td>
@@ -48,7 +58,7 @@
         <th>Avdelning</th>
         <th>Handläggare</th>
     </tr>
-    <tr>
+    @* <tr>
         <td>2023-05-01</td>
         <td><a asp-controller="Manager" asp-action="CrimeManager">2023-45-0201</a></td>
         <td>Oljeutsläpp</td>
@@ -103,5 +113,16 @@
         <td>Ej startad</td>
         <td>Tekniska avloppshanteringen</td>
         <td>Ingen utredare satt</td>
-    </tr>
+    </tr> *@
+    @foreach (var errand in Model.Errands)
+    {
+        <tr>
+            <td>@errand.DateOfObservation</td>
+            <td><a asp-controller="Manager" asp-action="CrimeManager">@errand.ErrandId</a></td>
+            <td>@errand.TypeOfCrime</td>
+            <td>@errand.StatusId</td>
+            <td>@errand.DepartmentId</td>
+            <td>@errand.EmployeeId</td>
+        </tr>
+    }
 </table>

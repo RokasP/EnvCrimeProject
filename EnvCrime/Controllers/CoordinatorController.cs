@@ -1,12 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EnvCrime.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EnvCrime.Controllers
 {
 	public class CoordinatorController : Controller
 	{
+
+		private readonly IEnvCrimeRepository repository;
+
+		public CoordinatorController(IEnvCrimeRepository repo)
+		{
+			repository = repo;
+		}
+
 		public ViewResult StartCoordinator()
 		{
-			return View();
+			return View(repository);
 		}
 
 		public ViewResult CrimeCoordinator()

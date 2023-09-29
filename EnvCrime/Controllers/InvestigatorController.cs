@@ -1,12 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EnvCrime.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EnvCrime.Controllers
 {
 	public class InvestigatorController : Controller
 	{
+
+		private readonly IEnvCrimeRepository repository;
+
+		public InvestigatorController(IEnvCrimeRepository repo)
+		{
+			repository = repo;
+		}
+
 		public ViewResult StartInvestigator()
 		{
-			return View();
+			return View(repository);
 		}
 
 		public ViewResult CrimeInvestigator()
