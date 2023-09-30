@@ -20,7 +20,7 @@ namespace EnvCrime.Controllers
 
 		public ViewResult CrimeCoordinator()
 		{
-			return View();
+			return View(repository);
 		}
 
 		public ViewResult ReportCrime()

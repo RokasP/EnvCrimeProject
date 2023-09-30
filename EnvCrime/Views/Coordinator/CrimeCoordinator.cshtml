@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnvCrimeRepository
+
+@{
 	Layout = "_CoordinatorNavigation";
 }
 
@@ -71,12 +73,16 @@
 		Ange enhet:
 		<select name="department">
 			<option selected="selected">Välj</option>
-			<option value="unit0">Småstads Kommun</option>
+			@* <option value="unit0">Småstads Kommun</option>
 			<option value="unit1">Tekniska Avloppshantering</option>
 			<option value="unit2">Klimat och Energi</option>
 			<option value="unit3">Miljö och Hälsoskydd</option>
 			<option value="unit4">Natur och Skogsvård</option>
-			<option value="unit5">Renhållning och Avfall</option>
+			<option value="unit5">Renhållning och Avfall</option> *@
+			@foreach (var dept in Model.Departments)
+			{
+				<option value="@dept.DepartmentId">@dept.DepartmentName</option>
+			}
 		</select>
 	</p>
 	<p><input class="button" type="submit" value="Spara" /></p>
