@@ -1,8 +1,7 @@
-﻿@model IEnvCrimeRepository
+﻿@model Errand
 
 @{
 	Layout = "_Public";
-	ViewBag.ShowSideColumn = true;
 }
 
 <h2>Välkommen att fylla i din anmälan av miljöbrott</h2>
@@ -16,27 +15,32 @@
 	</p>
 	<p>
 		<span class="label">Var har brottet skett någonstans?</span><br />
-		<input type="text" name="place" /> *
+		<input asp-for="Place" /> *
+		<span asp-validation-for="Place" style="color: orange"></span>
 	</p>
 	<p>
 		<span class="label">Vilken typ av brott?</span><br />
-		<input type="text" name="crime" /> *
+		<input asp-for="TypeOfCrime" /> *
+		<span asp-validation-for="TypeOfCrime" style="color: orange"></span>
 	</p>
 	<p>
 		<span class="label">När skedde brottet?</span><br />
-		<input type="text" name="crimeDate" /> *
+		<input asp-for="DateOfObservation" /> *
+		<span asp-validation-for="DateOfObservation" style="color: orange"></span>
 	</p>
 	<p>
 		<span class="label">Ditt namn (för- och efternamn):</span><br />
-		<input type="text" name="informersName" /> *
+		<input asp-for="InformerName" /> *
+		<span asp-validation-for="InformerName" style="color: orange"></span>
 	</p>
 	<p>
 		<span class="label">Din telefon:</span><br />
-		<input type="text" name="phone" /> *
+		<input asp-for="InformerPhone" /> *
+		<span asp-validation-for="InformerPhone" style="color: orange"></span>
 	</p>
 	<p>
 		<span class="label">Beskriv din observation<br /> (ex. namn på misstänkt person):</span><br />
-		<textarea name="observation" rows="5" cols="16"></textarea>
+		<textarea asp-for="Observation" rows="5" cols="16"></textarea>
 	</p>
 	<p>
 		<input class="button" type="submit" value="Skicka in" />

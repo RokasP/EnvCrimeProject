@@ -28,9 +28,9 @@ namespace EnvCrime.Controllers
 			return View();
 		}
 
-		public ViewResult Validate()
+		public ViewResult Validate(Errand errand)
 		{
-			return View();
+			return View(errand);
 		}
 
 		public ViewResult Thanks()
