@@ -1,4 +1,4 @@
-﻿using EnvCrime.Models;
+﻿using EnvCrime.Models.poco;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnvCrime.Controllers

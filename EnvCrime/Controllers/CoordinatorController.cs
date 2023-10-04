@@ -1,9 +1,10 @@
 ﻿using EnvCrime.Models;
+using EnvCrime.Models.poco;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnvCrime.Controllers
 {
-	public class CoordinatorController : Controller
+    public class CoordinatorController : Controller
 	{
 
 		private readonly IEnvCrimeRepository repository;
