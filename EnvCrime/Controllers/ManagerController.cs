@@ -18,8 +18,9 @@ namespace EnvCrime.Controllers
 			return View(repository);
 		}
 
-		public ViewResult CrimeManager()
+		public ViewResult CrimeManager(int errandId)
 		{
+			ViewBag.ErrandId = errandId;
 			return View(repository);
 		}
 	}

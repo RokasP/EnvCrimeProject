@@ -20,8 +20,9 @@ namespace EnvCrime.Controllers
 			return View(repository);
 		}
 
-		public ViewResult CrimeCoordinator()
+		public ViewResult CrimeCoordinator(int errandId)
 		{
+			ViewBag.ErrandId = errandId;
 			return View(repository);
 		}
 
@@ -43,7 +44,7 @@ namespace EnvCrime.Controllers
 
 		public ViewResult Thanks()
 		{
-			var errand = HttpContext.Session.Get<Errand>("NewErrandCoordinator"); // normalt borde finnas
+			var errand = HttpContext.Session.Get<Errand>("NewErrandCoordinator"); // borde normalt finnas
 			ViewBag.RefNumber = repository.SaveErrand(errand);
 			HttpContext.Session.Remove("NewErrandCoordinator");
 			return View();

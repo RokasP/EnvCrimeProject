@@ -6,6 +6,8 @@ namespace EnvCrime.Models
 	{
 		IQueryable<Errand> Errands { get; }
 
+		Errand GetErrand(int errandId);
+
 		String SaveErrand(Errand errand);
 
 		IQueryable<Employee> Employees { get; }

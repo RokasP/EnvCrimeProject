@@ -1,32 +1,34 @@
-﻿<h2>Detaljer för ärendet</h2>
+﻿@model Errand
+
+<h2>Detaljer för ärendet</h2>
 <p class="info">Du är inloggad som @ViewBag.RoleName</p>
-<h3>Ärende: 2023-45-0201</h3>
+<h3>Ärende: @Model.RefNumber</h3>
 
 <section id="leftColumn">
 	<h3>Anmälan</h3>
 	<p>
 		<span class="label">Typ av brott: </span><br />
-		Nedskräpning
+		@Model.TypeOfCrime
 	</p>
 	<p>
 		<span class="label">Brottsplats: </span><br />
-		Skogslunden vid Jensens gård
+		@Model.Place
 	</p>
 	<p>
 		<span class="label">Brottsdatum: </span><br />
-		2023-04-24
+		@Model.DateOfObservation
 	</p>
 	<p>
 		<span class="label">Anmälare: </span><br />
-		Maja Färjedal
+		@Model.InformerName
 	</p>
 	<p>
 		<span class="label">Telefon: </span><br />
-		432-554 55 22
+		@Model.InformerPhone
 	</p>
 	<p>
 		<span class="label">Observationer:</span><br />
-		Jag upptäckte soporna på en promenad den 24 april
+		@Model.Observation
 	</p>
 </section>
 

@@ -13,7 +13,12 @@ namespace EnvCrime.Models
 
         public IQueryable<Errand> Errands => context.Errands;
 
-        public String SaveErrand(Errand errand)
+		public Errand GetErrand(int errandId)
+		{
+			return Errands.Where(errand => errand.ErrandId == errandId).First();
+		}
+
+		public String SaveErrand(Errand errand)
         {
             if (errand.ErrandId == 0)
             {
