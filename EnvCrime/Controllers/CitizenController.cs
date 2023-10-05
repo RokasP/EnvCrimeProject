@@ -1,10 +1,19 @@
-﻿using EnvCrime.Models.poco;
+﻿using EnvCrime.Infrastructure;
+using EnvCrime.Models;
+using EnvCrime.Models.poco;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnvCrime.Controllers
 {
     public class CitizenController : Controller
     {
+		private readonly IEnvCrimeRepository repository;
+
+		public CitizenController(IEnvCrimeRepository repo)
+		{
+			repository = repo;
+		}
+
 		public ViewResult Services()
 		{
 			return View();
@@ -22,11 +31,15 @@ namespace EnvCrime.Controllers
 
 		public ViewResult Validate(Errand errand)
 		{
+			HttpContext.Session.Set<Errand>("NewErrandCitizen", errand);
 			return View(errand);
 		}
 
 		public ViewResult Thanks()
 		{
+			var errand = HttpContext.Session.Get<Errand>("NewErrandCitizen"); // normalt borde finnas
+			ViewBag.RefNumber = repository.SaveErrand(errand);
+			HttpContext.Session.Remove("NewErrandCitizen");
 			return View();
 		}
 	}

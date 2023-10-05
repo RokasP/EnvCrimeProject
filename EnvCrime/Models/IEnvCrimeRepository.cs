@@ -6,6 +6,8 @@ namespace EnvCrime.Models
 	{
 		IQueryable<Errand> Errands { get; }
 
+		String SaveErrand(Errand errand);
+
 		IQueryable<Employee> Employees { get; }
 
 		IQueryable<Department> Departments { get; }
@@ -17,5 +19,7 @@ namespace EnvCrime.Models
 		IQueryable<Picture> Pictures { get; }
 
 		IQueryable<Sequence> Sequences { get; }
+
+		Sequence GetLastSequence();
 	}
 }

@@ -13,7 +13,22 @@ namespace EnvCrime.Models
 
         public IQueryable<Errand> Errands => context.Errands;
 
-        public IQueryable<Employee> Employees => context.Employees;
+        public String SaveErrand(Errand errand)
+        {
+            if (errand.ErrandId == 0)
+            {
+                Sequence lastSequence = GetLastSequence();
+
+				errand.RefNumber = DateTime.Now.Year + "-45-" + lastSequence.CurrentValue++;
+                errand.StatusId = "S_A";
+                
+                context.Errands.Add(errand);
+            }
+            context.SaveChanges();
+            return errand.RefNumber;
+        }
+
+		public IQueryable<Employee> Employees => context.Employees;
 
         public IQueryable<Department> Departments => context.Departments;
 
@@ -24,5 +39,10 @@ namespace EnvCrime.Models
         public IQueryable<Picture> Pictures => context.Pictures;
 
         public IQueryable<Sequence> Sequences => context.Sequences;
-    }
+
+		public Sequence GetLastSequence()
+		{
+			return Sequences.Where(seq => seq.Id == 1).First();
+		}
+	}
 }
