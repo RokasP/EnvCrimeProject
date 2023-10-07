@@ -36,23 +36,23 @@
 	<h3>Utredning</h3>
 	<p>
 		<span class="label">Status:</span><br />
-		Pågående
+		@Model.StatusId
 	</p>
 	<p>
 		<span class="label">Ansvarig avdelning: </span><br />
-		Tekniska avloppshanteringen
+		@Model.DepartmentId
 	</p>
 	<p>
 		<span class="label">Handläggare: </span><br />
-		Ada Bengtsson
+		@Model.EmployeeId
 	</p>
 	<p>
 		<span class="label">Ytterligare information: </span><br />
-		Bland soporna hittades ett brev adresserat till Gösta Olsson
+		@Model.InvestigatorInfo
 	</p>
 	<p>
 		<span class="label">Händelser: </span><br />
-		Brev skickat till Gösta Olsson om soporna och anmälan som är gjord till polisen 2023-05-20
+		@Model.InvestigatorAction
 	</p>
 	<p>
 		<span class="label">Provtagning: </span><br />
