@@ -24,10 +24,6 @@
 	<p class="label">Ändring av status:</p>
 	<select name="status">
 		<option selected="selected">Välj</option>
-		@* <option value="stat1">Inrapporterad</option>
-		<option value="stat2">Ingen Åtgärd</option>
-		<option value="stat3">Påbörjad</option>
-		<option value="stat4">Klar</option> *@
 		@foreach (var status in Model.ErrandStatuses)
 		{
 			<option value="@status.StatusId">@status.StatusName</option>
