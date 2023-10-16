@@ -18,8 +18,10 @@ namespace EnvCrime.Controllers
 			return View(repository);
 		}
 
-		public ViewResult CrimeManager()
+		public ViewResult CrimeManager(string errandId)
 		{
+			ViewBag.RoleName = "avdelningschef";
+			ViewBag.ErrandId = errandId;
 			return View(repository);
 		}
 	}

@@ -1,13 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EnvCrime.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EnvCrime.Components
 {
 	public class ErrandViewComponent : ViewComponent
 	{
-		public IViewComponentResult Invoke(string roleName)
+		private readonly IEnvCrimeRepository repository;
+
+		public ErrandViewComponent(IEnvCrimeRepository repo)
+		{
+			repository = repo;
+		}
+
+		public IViewComponentResult Invoke(string errandId)
 		{ 
-			ViewBag.RoleName = roleName;
-			return View("SpecificErrand");
+			Errand errand = repository.GetErrandById(errandId);
+			return View("SpecificErrand", errand);
 		}
 	}
 }

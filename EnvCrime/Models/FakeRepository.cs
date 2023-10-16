@@ -81,6 +81,11 @@
 			}
 		}.AsQueryable<Errand>();
 
+		public Errand GetErrandById(string errandId)
+		{
+			return Errands.Where(errand => errand.ErrandId == errandId).First();
+		}
+
 		public IQueryable<Employee> Employees => new List<Employee>()
 		{
 			new Employee { EmployeeId = "E302", EmployeeName = "Martin Bäck", RoleTitle = "investigator", DepartmentId = "D01" },

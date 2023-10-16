@@ -4,8 +4,14 @@
 	Layout = "_CoordinatorNavigation";
 }
 
-@await Component.InvokeAsync("Errand", "samordnare")
+<!-- Rubriken ligger i Crime-sidan -->
+<h2>Detaljer för ärendet</h2>
+<p class="info">Du är inloggad som @ViewBag.RoleName</p>
 
+<!-- Detaljer för ärendet ritas ut av Vy-komponenten-->
+@await Component.InvokeAsync("Errand", ViewBag.ErrandId)
+
+<!-- Html-kontroller som är specifika för varje roll sköts av rollens Crime-sida -->
 <section id="bottomColumn">
 	<h3>Redigera ärende</h3>
 	<p>
