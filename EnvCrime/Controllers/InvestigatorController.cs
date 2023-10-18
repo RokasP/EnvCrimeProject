@@ -24,43 +24,43 @@ namespace EnvCrime.Controllers
         public ViewResult CrimeInvestigator(int errandId)
         {
             ViewBag.ErrandId = errandId;
-            return View(repository);
+            return View(repository.ErrandStatuses);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateCrime(int errandId, string selectedStatusId, string events, string information, IFormFile loadSample, IFormFile loadImage)
         {
             Errand errand = repository.GetErrand(errandId);
-            errand.StatusId = selectedStatusId;
-            errand.InvestigatorAction += " " + events;
-            errand.InvestigatorInfo += " " + information;
+            if (!string.IsNullOrWhiteSpace(selectedStatusId))
+            {
+                errand.StatusId = selectedStatusId;
+            }
+            if (!string.IsNullOrWhiteSpace(events))
+            {
+                errand.InvestigatorAction += " " + events;
+            }
+            if (!string.IsNullOrWhiteSpace(information))
+            {
+                errand.InvestigatorInfo += " " + information;
+            }
             repository.SaveErrand(errand);
 
             if (loadSample != null && loadSample.Length > 0) 
             {
-                await UploadFileToSystem(loadSample, "samples");
-                Sample sample = new Sample()
-                {
-                    SampleName = loadSample.FileName,
-                    ErrandId = errandId
-                };
+                await UploadFile(loadSample, "samples");
+                Sample sample = new Sample() { SampleName = loadSample.FileName, ErrandId = errandId };
                 repository.SaveSample(sample);
             }
             if (loadImage != null && loadImage.Length > 0)
             {
-                await UploadFileToSystem(loadImage, "pictures");
-
-                Picture picture = new Picture()
-                {
-                    PictureName = loadImage.FileName,
-                    ErrandId = errandId
-                };
+                await UploadFile(loadImage, "pictures");
+                Picture picture = new Picture() { PictureName = loadImage.FileName, ErrandId = errandId };
                 repository.SavePicture(picture);
             }
             return RedirectToAction("CrimeInvestigator", new { errandId });
         }
 
-        private async Task UploadFileToSystem(IFormFile file, string subfolderName)
+        private async Task UploadFile(IFormFile file, string subfolderName)
         {
             var tempFilePath = Path.GetTempFileName();
             using (var stream = new FileStream(tempFilePath, FileMode.Create))

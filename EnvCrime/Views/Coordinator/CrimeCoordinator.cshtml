@@ -1,4 +1,4 @@
-﻿@model IEnvCrimeRepository
+﻿@model IEnumerable<Department>
 
 @{
     Layout = "_CoordinatorNavigation";
@@ -9,17 +9,19 @@
 <section id="bottomColumn">
     <h3>Redigera ärende</h3>
     <form method="post" asp-controller="Coordinator" asp-action="UpdateCrime">
+        <!-- onsynliga fältet nedanför används för att föra över "errandId" till motsvarande action-metoden i kontrollern
+        då ViewBag inte fungerar där -->
+        <input type="hidden" name="errandId" value="@ViewBag.ErrandId" />
         <p>
             Ange enhet:
             <select name="selectedDepartmentId">
-                <option selected="selected" value="D00">Välj</option>
-                @foreach (var dept in Model.Departments)
+                <option selected="selected" disabled>Välj</option>
+                @foreach (var dept in Model)
                 {
                     <option value="@dept.DepartmentId">@dept.DepartmentName</option>
                 }
             </select>
         </p>
-        <input type="hidden" name="errandId" value="@ViewBag.ErrandId" />
         <input class="button" type="submit" value="Spara" />
     </form>
 </section>

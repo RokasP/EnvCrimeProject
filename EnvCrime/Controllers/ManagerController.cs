@@ -22,24 +22,51 @@ namespace EnvCrime.Controllers
         public ViewResult CrimeManager(int errandId)
         {
             ViewBag.ErrandId = errandId;
-            return View(repository);
+            return View(repository.Employees);
         }
 
         [HttpPost]
         public IActionResult UpdateCrime(int errandId, string selectedEmployeeId, bool noAction, string reason)
         {
-            Errand errand = repository.GetErrand(errandId);
+            //lägg inte in något värde än så länge eftersom vi vet inte när vi ska behöva det och vi vill inte hämta ut data från databasen flera gånger i onödan. Det är helt möjligt att man kör igenom metoden utan att behöva uppdatera något och således hämta data alls
+            Errand errand = null; 
             if (noAction)
             {
-                errand.StatusId = "S_B";
-                errand.InvestigatorInfo = reason;
+                if (!string.IsNullOrWhiteSpace(reason))
+                {
+                    SetNoAction(errand, errandId, reason);
+                }
             }
-            if (selectedEmployeeId != null)
+            else
             {
-                errand.EmployeeId = selectedEmployeeId;
+                if (!string.IsNullOrWhiteSpace(selectedEmployeeId))
+                {
+                    SetEmployee(errand, errandId, selectedEmployeeId);
+                }
             }
-            repository.SaveErrand(errand);
             return RedirectToAction("CrimeManager", new { errandId });
+        }
+
+        private void SetNoAction(Errand errand, int errandId, string reason)
+        {             
+            if (errand == null)
+            {
+                errand = repository.GetErrand(errandId);
+            }
+            errand.EmployeeId = null;
+            errand.StatusId = "S_B";
+            errand.InvestigatorInfo = reason;
+            repository.SaveErrand(errand);
+        }
+
+        private void SetEmployee(Errand errand, int errandId, string employeeId)
+        {
+            if (errand == null) 
+            {
+                errand = repository.GetErrand(errandId);
+            }
+            errand.EmployeeId = employeeId;
+            repository.SaveErrand(errand);
         }
     }
 }

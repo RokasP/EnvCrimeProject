@@ -1,4 +1,5 @@
 EnvCrime/obj/
 EnvCrime/bin/
 .vs/
-EnvCrime/wwwroot/uploads/
+EnvCrime/wwwroot/uploads/samples
+EnvCrime/wwwroot/uploads/pictures

@@ -8,7 +8,7 @@ namespace EnvCrime.Controllers
     public class CoordinatorController : Controller
     {
 
-        public static string EXCLUDED_DEPARTMENT_CHOICE = "D00";
+        private static string EXCLUDED_DEPARTMENT_CHOICE = "D00";
 
         private readonly IEnvCrimeRepository repository;
 
@@ -25,7 +25,7 @@ namespace EnvCrime.Controllers
         public ViewResult CrimeCoordinator(int errandId)
         {
             ViewBag.ErrandId = errandId;
-            return View(repository);
+            return View(repository.Departments);
         }
 
         public ViewResult ReportCrime()
@@ -55,13 +55,19 @@ namespace EnvCrime.Controllers
         [HttpPost]
         public IActionResult UpdateCrime(int errandId, string selectedDepartmentId)
         {
-            if (!selectedDepartmentId.Equals(EXCLUDED_DEPARTMENT_CHOICE))
+            if (shouldUpdate(selectedDepartmentId))
             {
                 Errand errand = repository.GetErrand(errandId);
                 errand.DepartmentId = selectedDepartmentId;
                 repository.SaveErrand(errand);
             }
             return RedirectToAction("CrimeCoordinator", new { errandId });
+        }
+
+        private bool shouldUpdate(string selectedDepartmentId)
+        {
+            return !string.IsNullOrWhiteSpace(selectedDepartmentId) && 
+                !selectedDepartmentId.Equals(EXCLUDED_DEPARTMENT_CHOICE);
         }
     }
 }
