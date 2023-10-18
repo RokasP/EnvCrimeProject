@@ -6,48 +6,62 @@ using Microsoft.AspNetCore.Mvc;
 namespace EnvCrime.Controllers
 {
     public class CoordinatorController : Controller
-	{
+    {
 
-		private readonly IEnvCrimeRepository repository;
+        public static string EXCLUDED_DEPARTMENT_CHOICE = "D00";
 
-		public CoordinatorController(IEnvCrimeRepository repo)
-		{
-			repository = repo;
-		}
+        private readonly IEnvCrimeRepository repository;
 
-		public ViewResult StartCoordinator()
-		{
-			return View(repository);
-		}
+        public CoordinatorController(IEnvCrimeRepository repo)
+        {
+            repository = repo;
+        }
 
-		public ViewResult CrimeCoordinator(int errandId)
-		{
-			ViewBag.ErrandId = errandId;
-			return View(repository);
-		}
+        public ViewResult StartCoordinator()
+        {
+            return View(repository);
+        }
 
-		public ViewResult ReportCrime()
-		{
-			var errand = HttpContext.Session.Get<Errand>("NewErrandCoordinator");
+        public ViewResult CrimeCoordinator(int errandId)
+        {
+            ViewBag.ErrandId = errandId;
+            return View(repository);
+        }
+
+        public ViewResult ReportCrime()
+        {
+            var errand = HttpContext.Session.Get<Errand>("NewErrandCoordinator");
             if (errand != null)
             {
-				return View(errand);
+                return View(errand);
             }
             return View();
-		}
+        }
 
-		public ViewResult Validate(Errand errand)
-		{
-			HttpContext.Session.Set<Errand>("NewErrandCoordinator", errand);
-			return View(errand);
-		}
+        public ViewResult Validate(Errand errand)
+        {
+            HttpContext.Session.Set<Errand>("NewErrandCoordinator", errand);
+            return View(errand);
+        }
 
-		public ViewResult Thanks()
-		{
-			var errand = HttpContext.Session.Get<Errand>("NewErrandCoordinator"); // borde normalt finnas
-			ViewBag.RefNumber = repository.SaveErrand(errand);
-			HttpContext.Session.Remove("NewErrandCoordinator");
-			return View();
-		}
-	}
+        public ViewResult Thanks()
+        {
+            var errand = HttpContext.Session.Get<Errand>("NewErrandCoordinator"); // borde normalt finnas
+            ViewBag.RefNumber = repository.SaveErrand(errand);
+            HttpContext.Session.Remove("NewErrandCoordinator");
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult UpdateCrime(int errandId, string selectedDepartmentId)
+        {
+            if (!selectedDepartmentId.Equals(EXCLUDED_DEPARTMENT_CHOICE))
+            {
+                Errand errand = repository.GetErrand(errandId);
+                errand.DepartmentId = selectedDepartmentId;
+                repository.SaveErrand(errand);
+            }
+            return RedirectToAction("CrimeCoordinator", new { errandId });
+        }
+    }
 }

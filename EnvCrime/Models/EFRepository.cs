@@ -1,4 +1,5 @@
 ﻿using EnvCrime.Models.poco;
+using Microsoft.EntityFrameworkCore;
 
 namespace EnvCrime.Models
 {
@@ -15,7 +16,10 @@ namespace EnvCrime.Models
 
 		public Errand GetErrand(int errandId)
 		{
-			return Errands.Where(errand => errand.ErrandId == errandId).First();
+			return Errands.Where(errand => errand.ErrandId == errandId)
+                .Include(errand => errand.Samples)
+                .Include(errand => errand.Pictures)
+                .First();
 		}
 
 		public String SaveErrand(Errand errand)
@@ -41,7 +45,27 @@ namespace EnvCrime.Models
 
         public IQueryable<Sample> Samples => context.Samples;
 
+        public int SaveSample(Sample sample)
+        {
+            if (sample.SampleId == 0)
+            {
+                context.Samples.Add(sample);
+            }
+            context.SaveChanges();
+            return sample.SampleId;
+        }
+
         public IQueryable<Picture> Pictures => context.Pictures;
+
+        public int SavePicture(Picture picture)
+        {
+            if (picture.PictureId == 0)
+            {
+                context.Pictures.Add(picture);
+            }
+            context.SaveChanges();
+            return picture.PictureId;
+        }
 
         public IQueryable<Sequence> Sequences => context.Sequences;
 

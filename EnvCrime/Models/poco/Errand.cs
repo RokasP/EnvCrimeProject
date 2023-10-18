@@ -36,5 +36,9 @@ namespace EnvCrime.Models.poco
         public string DepartmentId { get; set; }
 
         public string EmployeeId { get; set; }
+
+        public ICollection<Sample> Samples { get; set; }
+
+        public ICollection<Picture> Pictures { get; set; }
     }
 }

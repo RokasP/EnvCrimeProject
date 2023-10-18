@@ -1,22 +1,25 @@
 ﻿@model IEnvCrimeRepository
 
 @{
-	Layout = "_CoordinatorNavigation";
+    Layout = "_CoordinatorNavigation";
 }
 
 @await Component.InvokeAsync("Errand", "samordnare")
 
 <section id="bottomColumn">
-	<h3>Redigera ärende</h3>
-	<p>
-		Ange enhet:
-		<select name="department">
-			<option selected="selected">Välj</option>
-			@foreach (var dept in Model.Departments)
-			{
-				<option value="@dept.DepartmentId">@dept.DepartmentName</option>
-			}
-		</select>
-	</p>
-	<p><input class="button" type="submit" value="Spara" /></p>
+    <h3>Redigera ärende</h3>
+    <form method="post" asp-controller="Coordinator" asp-action="UpdateCrime">
+        <p>
+            Ange enhet:
+            <select name="selectedDepartmentId">
+                <option selected="selected" value="D00">Välj</option>
+                @foreach (var dept in Model.Departments)
+                {
+                    <option value="@dept.DepartmentId">@dept.DepartmentName</option>
+                }
+            </select>
+        </p>
+        <input type="hidden" name="errandId" value="@ViewBag.ErrandId" />
+        <input class="button" type="submit" value="Spara" />
+    </form>
 </section>

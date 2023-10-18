@@ -18,7 +18,11 @@ namespace EnvCrime.Models
 
 		IQueryable<Sample> Samples { get; }
 
+		int SaveSample(Sample sample);
+
 		IQueryable<Picture> Pictures { get; }
+
+		int SavePicture(Picture picture);
 
 		IQueryable<Sequence> Sequences { get; }
 

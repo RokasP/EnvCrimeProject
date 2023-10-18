@@ -1,23 +1,26 @@
 ﻿@model IEnvCrimeRepository
 
 @{
-	Layout = "_ManagerNavigation";
+    Layout = "_ManagerNavigation";
 }
 
 @await Component.InvokeAsync("Errand", "avdelningschef")
 
 <section id="bottomColumn">
-	<h3>Redigera ärende</h3>
-	<p>
-		Ange handläggare:
-		<select name="investigator">
-			<option selected="selected">Välj</option>
-			@foreach (var employee in Model.Employees)
-			{
-				<option value="@employee.EmployeeId">@employee.EmployeeName</option>
-			}
-		</select>
-	</p>
-	<p><input type="checkbox" name="noAction" value="true" /> Ingen åtgärd: <input type="text" name="reason" value="Ange motivering" /></p>
-	<p><input class="button" type="submit" value="Spara" /></p>
+    <h3>Redigera ärende</h3>
+    <form method="post" asp-controller="Manager" asp-action="UpdateCrime">
+        <p>
+            Ange handläggare:
+            <select name="selectedEmployeeId">
+                <option selected="selected">Välj</option>
+                @foreach (var employee in Model.Employees)
+                {
+                    <option value="@employee.EmployeeId">@employee.EmployeeName</option>
+                }
+            </select>
+        </p>
+        <input type="hidden" name="errandId" value="@ViewBag.ErrandId" />
+        <p><input type="checkbox" name="noAction" value="true" /> Ingen åtgärd: <input type="text" name="reason" value="Ange motivering" /></p>
+        <p><input class="button" type="submit" value="Spara" /></p>
+    </form>
 </section>
