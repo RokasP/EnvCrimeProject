@@ -21,7 +21,7 @@ namespace EnvCrime.Controllers
 		public ViewResult CrimeManager(int errandId)
 		{
 			ViewBag.ErrandId = errandId;
-			return View(repository);
+			return View(repository.Employees);
 		}
 	}
 }

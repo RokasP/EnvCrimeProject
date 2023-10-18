@@ -1,4 +1,4 @@
-﻿@model IEnvCrimeRepository
+﻿@model IEnumerable<Department>
 
 @{
 	Layout = "_CoordinatorNavigation";
@@ -12,7 +12,7 @@
 		Ange enhet:
 		<select name="department">
 			<option selected="selected">Välj</option>
-			@foreach (var dept in Model.Departments)
+			@foreach (var dept in Model)
 			{
 				<option value="@dept.DepartmentId">@dept.DepartmentName</option>
 			}

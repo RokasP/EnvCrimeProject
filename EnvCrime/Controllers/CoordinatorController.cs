@@ -20,13 +20,13 @@ namespace EnvCrime.Controllers
 			return View(repository);
 		}
 
-		public ViewResult CrimeCoordinator(int errandId)
-		{
-			ViewBag.ErrandId = errandId;
-			return View(repository);
-		}
+        public ViewResult CrimeCoordinator(int errandId)
+        {
+            ViewBag.ErrandId = errandId;
+            return View(repository.Departments);
+        }
 
-		public ViewResult ReportCrime()
+        public ViewResult ReportCrime()
 		{
 			var errand = HttpContext.Session.Get<Errand>("NewErrandCoordinator");
             if (errand != null)

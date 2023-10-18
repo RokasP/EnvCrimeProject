@@ -1,4 +1,4 @@
-﻿@model IEnvCrimeRepository
+﻿@model IEnumerable<ErrandStatus>
 
 @{
 	Layout = "_InvestigatorNavigation";
@@ -24,7 +24,7 @@
 	<p class="label">Ändring av status:</p>
 	<select name="status">
 		<option selected="selected">Välj</option>
-		@foreach (var status in Model.ErrandStatuses)
+		@foreach (var status in Model)
 		{
 			<option value="@status.StatusId">@status.StatusName</option>
 		}
