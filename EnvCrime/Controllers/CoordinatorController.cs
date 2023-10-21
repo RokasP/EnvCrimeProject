@@ -57,9 +57,7 @@ namespace EnvCrime.Controllers
         {
             if (shouldUpdate(selectedDepartmentId))
             {
-                Errand errand = repository.GetErrand(errandId);
-                errand.DepartmentId = selectedDepartmentId;
-                repository.SaveErrand(errand);
+                repository.UpdateErrandDepartment(errandId, selectedDepartmentId);
             }
             return RedirectToAction("CrimeCoordinator", new { errandId });
         }

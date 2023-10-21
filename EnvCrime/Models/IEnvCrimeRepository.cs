@@ -10,6 +10,14 @@ namespace EnvCrime.Models
 
 		String SaveErrand(Errand errand);
 
+		void UpdateErrandDepartment(int errandId, String departmentId);
+
+		void UpdateErrandEmployee(int errandId, String employeeId);
+
+        void SetErrandNoAction(int errandId, String noActionReason);
+
+		void UpdateErrandData(int errandId, String statusId, String events, String information, IFormFile sampleFile, IFormFile imageFile);
+
 		IQueryable<Employee> Employees { get; }
 
 		IQueryable<Department> Departments { get; }
