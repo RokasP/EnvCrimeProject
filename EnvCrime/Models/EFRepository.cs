@@ -81,14 +81,14 @@ namespace EnvCrime.Models
 
             if (sampleFile != null && sampleFile.Length > 0)
             {
-                await UploadFile(sampleFile, "samples");
-                Sample sample = new Sample() { SampleName = sampleFile.FileName, ErrandId = errandId };
+                String uniqueSampleName = await UploadFile(sampleFile, "samples");
+                Sample sample = new Sample() { SampleName = uniqueSampleName, ErrandId = errandId };
                 SaveSample(sample);
             }
             if (imageFile != null && imageFile.Length > 0)
             {
-                await UploadFile(imageFile, "pictures");
-                Picture picture = new Picture() { PictureName = imageFile.FileName, ErrandId = errandId };
+                String uniquePictureName = await UploadFile(imageFile, "pictures");
+                Picture picture = new Picture() { PictureName = uniquePictureName, ErrandId = errandId };
                 SavePicture(picture);
             }
         }
@@ -130,7 +130,7 @@ namespace EnvCrime.Models
 			return Sequences.Where(seq => seq.Id == 1).First();
 		}
 
-        private async Task UploadFile(IFormFile file, string subfolderName)
+        private async Task<String> UploadFile(IFormFile file, string subfolderName)
         {
             var tempFilePath = Path.GetTempFileName();
             using (var stream = new FileStream(tempFilePath, FileMode.Create))
@@ -138,8 +138,17 @@ namespace EnvCrime.Models
                 await file.CopyToAsync(stream);
             }
 
-            var finalFilePath = Path.Combine(environment.WebRootPath, "uploads", subfolderName, file.FileName);
+            String uniqueFileName = makeUniqueName(file.FileName);
+
+            var finalFilePath = Path.Combine(environment.WebRootPath, "uploads", subfolderName, uniqueFileName);
             File.Move(tempFilePath, finalFilePath);
+
+            return uniqueFileName;
+        }
+
+        private String makeUniqueName(String fileName)
+        {
+            return Guid.NewGuid().ToString() + "_" + fileName;
         }
     }
 }
