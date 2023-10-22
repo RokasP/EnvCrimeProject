@@ -27,9 +27,9 @@ namespace EnvCrime.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateCrime(int errandId, string selectedStatusId, string events, string information, IFormFile loadSample, IFormFile loadImage)
+        public async Task<IActionResult> UpdateCrime(int errandId, string selectedStatusId, string events, string information, IFormFile loadSample, IFormFile loadImage)
         {
-            repository.UpdateErrandData(errandId, selectedStatusId, events, information, loadSample, loadImage);
+            await repository.UpdateErrandData(errandId, selectedStatusId, events, information, loadSample, loadImage);
             return RedirectToAction("CrimeInvestigator", new { errandId });
         }
     }

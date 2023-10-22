@@ -62,7 +62,7 @@ namespace EnvCrime.Models
             SaveErrand(errand);
         }
 
-        public async void UpdateErrandData(int errandId, String statusId, String events, String information, IFormFile sampleFile, IFormFile imageFile)
+        public async Task UpdateErrandData(int errandId, String statusId, String events, String information, IFormFile sampleFile, IFormFile imageFile)
         {
             Errand errand = GetErrand(errandId);
             if (!string.IsNullOrWhiteSpace(statusId))

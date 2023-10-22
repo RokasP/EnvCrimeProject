@@ -16,7 +16,7 @@ namespace EnvCrime.Models
 
         void SetErrandNoAction(int errandId, String noActionReason);
 
-		void UpdateErrandData(int errandId, String statusId, String events, String information, IFormFile sampleFile, IFormFile imageFile);
+		Task UpdateErrandData(int errandId, String statusId, String events, String information, IFormFile sampleFile, IFormFile imageFile);
 
 		IQueryable<Employee> Employees { get; }
 
