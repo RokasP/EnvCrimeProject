@@ -1,28 +1,28 @@
-﻿@{
+﻿@model LoginData
+
+@{
 	Layout = "_Public";
-	ViewBag.ShowSideColumn = true;
 }
 
 <h2>Inloggning för Småstads personal</h2>
 <p class="info">En säker tjänst från Småstads IT-avdelning</p>
 
-<form method="post" asp-controller="Coordinator" asp-action="StartCoordinator">
+<form method="post" asp-controller="Home" asp-action="Login">
 	<p>
 		<input type="hidden" name="isSubmitted" value="true" />
 	</p>
 	<p>
-		<span class="label">Användarnamn:</span><br />
-		<input type="text" name="user" />
+		<label asp-for="UserName" class="label">Användarnamn:</label><br />
+		<input asp-for="UserName" />
+		<span asp-validation-for="UserName" style="color: orange"></span>
 	</p>
 	<p>
-		<span class="label">Lösenord:</span><br />
-		<input type="password" name="password" />
+		<label asp-for="Password" class="label">Lösenord:</label><br />
+		<input asp-for="Password" />
+		<span asp-validation-for="Password" style="color: orange"></span>
 	</p>
 	<p>
-		<input class="button" type="submit" value="Inloggning av samordnare" />
-		<br />
-		<!--Dessa länkar ska tas bort i uppgift 5 eftersom vi då fixar till att inloggningen hämtar rätt sida utifrån rollen-->
-		<a class="button" asp-controller="Manager" asp-action="StartManager">Inloggning av chefer</a><br />
-		<a class="button" asp-controller="Investigator" asp-action="StartInvestigator">Inloggning av handläggare</a>
+		<input class="button" type="submit" value="Logga in" />
 	</p>
+	<div asp-validation-summary="All" style="color: orange"></div>
 </form>

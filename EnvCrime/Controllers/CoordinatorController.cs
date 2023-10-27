@@ -1,10 +1,12 @@
 ﻿using EnvCrime.Infrastructure;
 using EnvCrime.Models;
 using EnvCrime.Models.poco;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnvCrime.Controllers
 {
+    [Authorize(Roles = "Coordinator")]
     public class CoordinatorController : Controller
     {
 

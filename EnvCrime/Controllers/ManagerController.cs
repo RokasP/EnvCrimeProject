@@ -1,8 +1,10 @@
 ﻿using EnvCrime.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnvCrime.Controllers
 {
+    [Authorize(Roles = "Manager")]
     public class ManagerController : Controller
     {
 
