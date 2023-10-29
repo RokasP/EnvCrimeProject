@@ -1,10 +1,11 @@
-﻿using EnvCrime.Models.poco;
+﻿using EnvCrime.Models.dto;
+using EnvCrime.Models.poco;
 
 namespace EnvCrime.Models
 {
     public interface IEnvCrimeRepository
 	{
-		IQueryable<Errand> Errands { get; }
+		IQueryable<ErrandDto> ErrandDtos { get; }
 
 		Errand GetErrand(int errandId);
 
@@ -18,11 +19,17 @@ namespace EnvCrime.Models
 
 		Task UpdateErrandData(int errandId, String statusId, String events, String information, IFormFile sampleFile, IFormFile imageFile);
 
-		IQueryable<Employee> Employees { get; }
+		IQueryable<Employee> ManagerEmployees { get; }
+
+		Employee GetEmployee(String employeeId);
 
 		IQueryable<Department> Departments { get; }
 
+		Department GetDepartment(String departmentId);
+
 		IQueryable<ErrandStatus> ErrandStatuses { get; }
+
+		ErrandStatus GetErrandStatus(String errandId);
 
 		IQueryable<Sample> Samples { get; }
 

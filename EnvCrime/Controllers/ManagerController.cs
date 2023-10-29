@@ -23,7 +23,7 @@ namespace EnvCrime.Controllers
         public ViewResult CrimeManager(int errandId)
         {
             ViewBag.ErrandId = errandId;
-            return View(repository.Employees);
+            return View(repository.ManagerEmployees);
         }
 
         [HttpPost]

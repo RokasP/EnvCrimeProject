@@ -1,4 +1,5 @@
-﻿using EnvCrime.Models.poco;
+﻿using EnvCrime.Models.dto;
+using EnvCrime.Models.poco;
 using Microsoft.EntityFrameworkCore;
 
 namespace EnvCrime.Models
@@ -6,19 +7,29 @@ namespace EnvCrime.Models
     public class EFRepository : IEnvCrimeRepository
     {
         private readonly ApplicationDbContext context;
+        private readonly IHttpContextAccessor httpContext;
         private IWebHostEnvironment environment;
 
-        public EFRepository(ApplicationDbContext ctx, IWebHostEnvironment env)
+        public EFRepository(ApplicationDbContext ctx, IWebHostEnvironment env, IHttpContextAccessor httpCtx)
         {
             context = ctx;
             environment = env;
+            httpContext = httpCtx;
         }
 
-        public IQueryable<Errand> Errands => context.Errands;
+        public IQueryable<ErrandDto> ErrandDtos
+        {
+            get
+            {
+                var currentUserName = httpContext.HttpContext.User.Identity.Name;
+                var currentUser = Employees.Where(employee => employee.EmployeeId == currentUserName).First();
+                return MapToErrandDtos(GetErrandsForUser(currentUser));
+            }
+        }
 
-		public Errand GetErrand(int errandId)
+        public Errand GetErrand(int errandId)
 		{
-			return Errands.Where(errand => errand.ErrandId == errandId)
+			return context.Errands.Where(errand => errand.ErrandId == errandId)
                 .Include(errand => errand.Samples)
                 .Include(errand => errand.Pictures)
                 .First();
@@ -93,11 +104,37 @@ namespace EnvCrime.Models
             }
         }
 
-        public IQueryable<Employee> Employees => context.Employees;
+        private IQueryable<Employee> Employees => context.Employees;
+
+        public IQueryable<Employee> ManagerEmployees
+        {
+            get
+            {
+                var currentUserName = httpContext.HttpContext.User.Identity.Name;
+                var currentUser = Employees.Where(employee => employee.EmployeeId == currentUserName).First();
+
+                return Employees.Where(employee => employee.DepartmentId == currentUser.DepartmentId);
+            }
+        }
+
+        public Employee GetEmployee(String employeeId)
+        {
+            return Employees.Where(employee => employee.EmployeeId == employeeId).FirstOrDefault();
+        }
 
         public IQueryable<Department> Departments => context.Departments;
 
+        public Department GetDepartment(String departmentId)
+        {
+            return Departments.Where(dept => dept.DepartmentId == departmentId).FirstOrDefault();
+        }
+
         public IQueryable<ErrandStatus> ErrandStatuses => context.ErrandStatus1;
+
+        public ErrandStatus GetErrandStatus(String errandStatusId)
+        {
+            return ErrandStatuses.Where(errandStatus => errandStatus.StatusId == errandStatusId).First();
+        }
 
         public IQueryable<Sample> Samples => context.Samples;
 
@@ -138,7 +175,7 @@ namespace EnvCrime.Models
                 await file.CopyToAsync(stream);
             }
 
-            String uniqueFileName = makeUniqueName(file.FileName);
+            String uniqueFileName = MakeUniqueName(file.FileName);
 
             var finalFilePath = Path.Combine(environment.WebRootPath, "uploads", subfolderName, uniqueFileName);
             File.Move(tempFilePath, finalFilePath);
@@ -146,9 +183,44 @@ namespace EnvCrime.Models
             return uniqueFileName;
         }
 
-        private String makeUniqueName(String fileName)
+        private static String MakeUniqueName(String fileName)
         {
             return Guid.NewGuid().ToString() + "_" + fileName;
+        }
+
+        private IQueryable<Errand> GetErrandsForUser(Employee currentUser)
+        {
+            switch (currentUser.RoleTitle)
+            {
+                case "Coordinator":
+                    return context.Errands;
+                case "Manager":
+                    return context.Errands.Where(errand => errand.DepartmentId == currentUser.DepartmentId);
+                case "Investigator":
+                    return context.Errands.Where(errand => errand.EmployeeId == currentUser.EmployeeId);
+                default:
+                    return Enumerable.Empty<Errand>().AsQueryable();
+            }
+        }
+
+        private IQueryable<ErrandDto> MapToErrandDtos(IQueryable<Errand> errands)
+        {
+            var errandsListItems = from e in errands
+                                   join s in ErrandStatuses on e.StatusId equals s.StatusId
+                                   join d in Departments on e.DepartmentId equals d.DepartmentId into tempDepts from allDepts in tempDepts.DefaultIfEmpty()
+                                   join emp in Employees on e.EmployeeId equals emp.EmployeeId into tempEmps from allEmps in tempEmps.DefaultIfEmpty()
+                                   orderby e.RefNumber descending
+                                   select new ErrandDto
+                                   {
+                                       DateOfObservation = e.DateOfObservation,
+                                       ErrandId = e.ErrandId,
+                                       RefNumber = e.RefNumber,
+                                       TypeOfCrime = e.TypeOfCrime,
+                                       StatusName = s.StatusName,
+                                       DepartmentName = e.DepartmentId == null ? "Ej tillsatt" : allDepts.DepartmentName,
+                                       EmployeeName = e.EmployeeId == null ? "Ej tillsatt" : allEmps.EmployeeName
+                                   };
+            return errandsListItems;
         }
     }
 }
