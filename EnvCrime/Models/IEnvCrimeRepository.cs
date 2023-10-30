@@ -5,6 +5,8 @@ namespace EnvCrime.Models
 {
     public interface IEnvCrimeRepository
 	{
+		Employee GetLoggedInUser();
+
 		IQueryable<ErrandDto> ErrandDtos { get; }
 
 		Errand GetErrand(int errandId);

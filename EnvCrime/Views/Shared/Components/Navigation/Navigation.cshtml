@@ -1,0 +1,10 @@
+﻿<nav>
+    <ul>
+        <li><a class="reports" asp-controller=@ViewBag.ControllerName asp-action=@ViewBag.StartActionName>Start (Ärenden)</a></li>
+        @if (ViewBag.ControllerName == "Coordinator")
+        {
+            <li><a class="reportAdd" asp-controller="Coordinator" asp-action="ReportCrime">Rapportera brott</a></li>
+        }
+        <li class="right"><a class="logout" asp-controller="Home" asp-action="Logout">Logga ut</a></li>
+    </ul>
+</nav>

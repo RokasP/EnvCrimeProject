@@ -17,12 +17,18 @@ namespace EnvCrime.Models
             httpContext = httpCtx;
         }
 
+        public Employee GetLoggedInUser()
+        {
+            var currentUserName = httpContext.HttpContext.User.Identity.Name;
+            var currentUser = Employees.Where(employee => employee.EmployeeId == currentUserName).First();
+            return currentUser;
+        }
+
         public IQueryable<ErrandDto> ErrandDtos
         {
             get
             {
-                var currentUserName = httpContext.HttpContext.User.Identity.Name;
-                var currentUser = Employees.Where(employee => employee.EmployeeId == currentUserName).First();
+                var currentUser = GetLoggedInUser();
                 return MapToErrandDtos(GetErrandsForUser(currentUser));
             }
         }
