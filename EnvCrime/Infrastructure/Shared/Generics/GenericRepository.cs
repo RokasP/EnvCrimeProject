@@ -1,9 +1,10 @@
 ﻿using EnvCrime.Models;
+using LinqKit;
 using System.Linq.Expressions;
 
-namespace EnvCrime.Infrastructure.Repository.Generic
+namespace EnvCrime.Infrastructure.Shared.Generics
 {
-    public class GenericRepository<T, U> : IRepository<T, U> where T : class
+    public class GenericRepository<T, U> : IRepository<T, U> where T : GenericEntity
     {
         private readonly ApplicationDbContext dbContext;
 
@@ -26,8 +27,9 @@ namespace EnvCrime.Infrastructure.Repository.Generic
         public T Save(T entity)
         {
             BeforeSave(entity);
-            if (entity == null /*entity.id == 0*/)
+            if (entity.IsNew())
             {
+                BeforeInitialSave(entity);
                 dbContext.Set<T>().Add(entity);
             }
             dbContext.SaveChanges();
@@ -45,9 +47,11 @@ namespace EnvCrime.Infrastructure.Repository.Generic
             dbContext.Remove(entity);
         }
 
-        public virtual void BeforeSave(T entity) { }
+        protected virtual void BeforeInitialSave(T entity) { }
 
-        public virtual void AfterSave(T entity) { }
+        protected virtual void BeforeSave(T entity) { }
+
+        protected virtual void AfterSave(T entity) { }
 
         // avancerade sökningsoperationerna
         public IQueryable<T> Search(params Expression<Func<T, bool>>[] searchPredicates)
@@ -57,12 +61,12 @@ namespace EnvCrime.Infrastructure.Repository.Generic
 
         private static Expression<Func<T, bool>> BuildQuery<T>(params Expression<Func<T, bool>>[] searchPredicates)
         {
-            Expression<Func<T, bool>> compundExpression = x => true; // "identitetsfunktion", behövs för att lagra filtreringskriterier
+            Expression<Func<T, bool>> compoundExpression = PredicateBuilder.New<T>(true); // "identitetsfunktion", behövs för att lagra filtreringskriterier
             foreach (var predicate in searchPredicates)
             {
-                Expression.AndAlso(compundExpression, predicate);
+                compoundExpression = compoundExpression.And(predicate);
             }
-            return compundExpression;
+            return compoundExpression;
         }
     }
 }

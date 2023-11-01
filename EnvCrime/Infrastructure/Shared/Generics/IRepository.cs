@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace EnvCrime.Infrastructure.Repository.Generic
+namespace EnvCrime.Infrastructure.Shared.Generics
 {
     /*
 	 * T står för entitetstyp, i nuläget är
@@ -10,7 +10,7 @@ namespace EnvCrime.Infrastructure.Repository.Generic
 	 * U = [int, string, string, string, int, int, int]
 	 * 
 	 */
-    public interface IRepository<T, U> where T : class
+    public interface IRepository<T, U> where T : GenericEntity
     {
         public T GetById(U id);
         public IQueryable<T> GetAll();

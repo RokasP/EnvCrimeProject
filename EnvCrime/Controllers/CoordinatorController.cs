@@ -1,4 +1,4 @@
-﻿using EnvCrime.Infrastructure;
+﻿using EnvCrime.Infrastructure.Shared.Helpers;
 using EnvCrime.Models;
 using EnvCrime.Models.poco;
 using Microsoft.AspNetCore.Authorization;

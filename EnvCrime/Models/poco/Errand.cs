@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EnvCrime.Infrastructure.Shared.Generics;
+using System.ComponentModel.DataAnnotations;
 
 namespace EnvCrime.Models.poco
 {
-    public class Errand
+    public class Errand : GenericEntity
     {
         public int ErrandId { get; set; }
 
@@ -40,5 +41,10 @@ namespace EnvCrime.Models.poco
         public ICollection<Sample> Samples { get; set; }
 
         public ICollection<Picture> Pictures { get; set; }
-    }
+
+		public override bool IsNew()
+		{
+			return ErrandId == 0;
+		}
+	}
 }

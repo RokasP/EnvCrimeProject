@@ -1,4 +1,4 @@
-using EnvCrime.Infrastructure.Repository.Generic;
+using EnvCrime.Infrastructure.Shared.Generics;
 using EnvCrime.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
