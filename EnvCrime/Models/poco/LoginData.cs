@@ -12,7 +12,5 @@ namespace EnvCrime.Models.poco
         [Display(Name = "Lösenord")]
         [DataType(DataType.Password)]
         public String Password { get; set; }
-
-        public String ReturnUrl { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using EnvCrime.Infrastructure.Repository.Generic;
 using EnvCrime.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ builder.Services.AddSession();
 builder.Services.AddTransient<IEnvCrimeRepository, EFRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
+builder.Services.AddScoped(typeof(IRepository<,>), typeof(GenericRepository<,>));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>();
 
