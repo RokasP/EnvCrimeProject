@@ -1,4 +1,4 @@
-﻿@model IEnvCrimeRepository
+﻿@model SearchQueryDto
 
 @{
     Layout = "_Staff";
@@ -16,49 +16,24 @@
         <td>&nbsp;</td>
     </tr>
     <tr>
-        <td>
-            <select name="status">
-                <option selected="selected">Välj alla</option>
-                @foreach (var status in Model.ErrandStatuses)
-                {
-                    <option value="@status.StatusId">@status.StatusName</option>
-                }
-            </select>
-        </td>
-        <td>
-            <select name="department">
-                <option selected="selected">Välj alla</option>
-                @foreach (var dept in Model.Departments)
-                {
-                    <option value="@dept.DepartmentId">@dept.DepartmentName</option>
-                }
-            </select>
-        </td>
-        <td><input class="button" type="submit" value="Hämta lista" /></td>
-        <td><input name="casenumber" /></td>
-        <td><input class="button" type="submit" value="Sök" /></td>
+        <form method="post" asp-controller="Coordinator" asp-action="StartCoordinator">
+            <td>
+                <select asp-for="StatusId" asp-items="@(new SelectList(ViewBag.Statuses, "StatusId", "StatusName"))">
+                    <option selected value="">Välj alla</option>
+                </select>
+            </td>
+            <td>
+                <select asp-for="DepartmentId" asp-items="@(new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"))">
+                    <option selected value="">Välj alla</option>
+                </select>
+            </td>
+            <td><input class="button" type="submit" value="Hämta lista" /></td>
+        </form>
+        <form method="post" asp-controller="Coordinator" asp-action="StartCoordinator">
+            <td><input asp-for="RefNumber" /></td>
+            <td><input class="button" type="submit" value="Sök" /></td>
+        </form>
     </tr>
 </table>
 
-<!--Nedan ser man en lista på ärenden-->
-<table>
-    <tr>
-        <th>Ärende anmält</th>
-        <th>Ärendenummer</th>
-        <th>Miljöbrott</th>
-        <th>Status</th>
-        <th>Avdelning</th>
-        <th>Handläggare</th>
-    </tr>
-    @foreach (var errand in Model.ErrandDtos)
-    {
-        <tr>
-            <td>@errand.DateOfObservation.ToShortDateString()</td>
-            <td><a asp-controller="Coordinator" asp-action="CrimeCoordinator" asp-route-errandId="@errand.ErrandId">@errand.RefNumber</a></td>
-            <td>@errand.TypeOfCrime</td>
-            <td>@errand.StatusName</td>
-            <td>@errand.DepartmentName</td>
-            <td>@errand.EmployeeName</td>
-        </tr>
-    }
-</table>
+@await Component.InvokeAsync("ErrandList", Model)

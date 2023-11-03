@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ErrandStatus>
+﻿@model ErrandUpdateDto
 
 @{
     Layout = "_Staff";
@@ -12,27 +12,23 @@
     <form method="post" asp-controller="Investigator" asp-action="UpdateCrime" enctype="multipart/form-data">
         <!-- onsynliga fältet nedanför används för att föra över "errandId" till motsvarande action-metoden i kontrollern
         då ViewBag inte fungerar där -->
-        <input type="hidden" name="errandId" value="@ViewBag.ErrandId" />
+        <input type="hidden" asp-for="ErrandId" value="@ViewBag.ErrandId" />
 
         <p class="label">Ytterligare information:</p>
-        <textarea name="information" rows="5" cols="60"></textarea>
+        <textarea asp-for="Information" rows="5" cols="60"></textarea>
 
         <p class="label">Händelser:</p>
-        <textarea name="events" rows="5" cols="60"></textarea>
+        <textarea asp-for="Events" rows="5" cols="60"></textarea>
 
         <p class="label">Prover:</p>
-        <input type="file" name="loadSample" />
+        <input asp-for="SampleFile" />
 
         <p class="label">Ladda upp bilder:</p>
-        <input type="file" name="loadImage" accept=".jpg, .jpeg, .gif, .bmp, .png" />
+        <input asp-for="ImageFile" accept=".jpg, .jpeg, .gif, .bmp, .png" />
 
         <p class="label">Ändring av status:</p>
-        <select name="selectedStatusId">
-            <option selected="selected" disabled>Välj</option>
-            @foreach (var status in Model)
-            {
-                <option value="@status.StatusId">@status.StatusName</option>
-            }
+        <select asp-for="StatusId" asp-items="@(new SelectList(ViewBag.Statuses, "StatusId", "StatusName"))">
+            <option selected disabled>Välj</option>
         </select>
         <p>
             <input class="button" type="submit" value="Spara ändringarna" />

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Department>
+﻿@model ErrandUpdateDto
 
 @{
     Layout = "_Staff";
@@ -11,15 +11,11 @@
     <form method="post" asp-controller="Coordinator" asp-action="UpdateCrime">
         <!-- onsynliga fältet nedanför används för att föra över "errandId" till motsvarande action-metoden i kontrollern
         då ViewBag inte fungerar där -->
-        <input type="hidden" name="errandId" value="@ViewBag.ErrandId" />
+        <input type="hidden" asp-for="ErrandId" value="@ViewBag.ErrandId" />
         <p>
             Ange enhet:
-            <select name="selectedDepartmentId">
-                <option selected="selected" disabled>Välj</option>
-                @foreach (var dept in Model)
-                {
-                    <option value="@dept.DepartmentId">@dept.DepartmentName</option>
-                }
+            <select asp-for="DepartmentId" asp-items="@(new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"))">
+                <option selected disabled>Välj</option>
             </select>
         </p>
         <input class="button" type="submit" value="Spara" />

@@ -8,9 +8,11 @@ using System.Data.Entity;
 
 namespace EnvCrime.Infrastructure.Services
 {
-    public class ErrandService : GenericRepository<Errand, int>
+	public class ErrandService : GenericRepository<Errand, int>
     {
-        private readonly Utilities utilities;
+		private static string EXCLUDED_DEPARTMENT_CHOICE = "D00";
+
+		private readonly Utilities utilities;
         private readonly AuthenticationHelperService authenticationService;
         private readonly SequenceService sequenceService;
         private readonly DepartmentService departmentService;
@@ -40,23 +42,25 @@ namespace EnvCrime.Infrastructure.Services
 
         public IQueryable<ErrandDto> Search(SearchQueryDto query)
         {
-            var predicate = PredicateBuilder.New<Errand>();
+            var predicate = PredicateBuilder.New<Errand>(true);
 
-            if (query.StatusId != null)
-            {
-                predicate.And(errand => errand.StatusId == query.StatusId);
-            }
-            if (query.DepartmentId != null)
-            {
-                predicate.And(errand => errand.DepartmentId == query.DepartmentId);
-            }
-            if (query.EmployeeId != null)
-            {
-                predicate.And(errand => errand.EmployeeId == query.EmployeeId);
-            }
-            if (query.RefNumber != null)
-            {
-                predicate.And(errand => errand.RefNumber.StartsWith(query.RefNumber));
+            if (query != null) {
+                if (query.StatusId != null)
+                {
+                    predicate.And(errand => errand.StatusId == query.StatusId);
+                }
+                if (query.DepartmentId != null)
+                {
+                    predicate.And(errand => errand.DepartmentId == query.DepartmentId);
+                }
+                if (query.EmployeeId != null)
+                {
+                    predicate.And(errand => errand.EmployeeId == query.EmployeeId);
+                }
+                if (query.RefNumber != null)
+                {
+                    predicate.And(errand => errand.RefNumber.StartsWith(query.RefNumber));
+                }
             }
 
             return MapToDtos(Search(predicate));
@@ -70,26 +74,26 @@ namespace EnvCrime.Infrastructure.Services
                 .First();
         }
 
-        public void SetNoAction(int id, String reason)
+        public void SetNoAction(ErrandUpdateDto dto)
         {
-            Errand errand = GetById(id);
+            Errand errand = GetById(dto.ErrandId);
 
             errand.EmployeeId = null;
             errand.StatusId = "S_B";
-            errand.InvestigatorInfo = reason;
+            errand.InvestigatorInfo = dto.NoActionReason;
             
             Save(errand);
         }
 
-        public async void UpdateErrand(ErrandUpdateDto dto)
+        public async Task UpdateErrand(ErrandUpdateDto dto)
         {
             Errand errand = GetById(dto.ErrandId);
 
             if (!string.IsNullOrWhiteSpace(dto.EmployeeId))
             {
-                errand.EmployeeId = dto.EmployeeId;
-            }
-            if (!string.IsNullOrWhiteSpace(dto.DepartmentId))
+				errand.EmployeeId = dto.EmployeeId;
+			}
+            if (!string.IsNullOrWhiteSpace(dto.DepartmentId) && !dto.DepartmentId.Equals(EXCLUDED_DEPARTMENT_CHOICE))
             {
                 errand.DepartmentId = dto.DepartmentId;
             }

@@ -1,38 +1,50 @@
-﻿using EnvCrime.Models;
+﻿using EnvCrime.Infrastructure.Services;
+using EnvCrime.Infrastructure.Shared.Helpers;
+using EnvCrime.Models.dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnvCrime.Controllers
 {
     [Authorize(Roles = "Investigator")]
-    public class InvestigatorController : Controller
-    {
+	public class InvestigatorController : Controller
+	{
 
-        private readonly IEnvCrimeRepository repository;
-        private IWebHostEnvironment environment;
+		private readonly AuthenticationHelperService authenticationService;
+		private readonly ErrandService errandService;
+		private readonly ErrandStatusService errandStatusService;
 
-        public InvestigatorController(IEnvCrimeRepository repo, IWebHostEnvironment env)
-        {
-            repository = repo;
-            environment = env;
-        }
+		public InvestigatorController(AuthenticationHelperService authService, ErrandService errService, ErrandStatusService errStatService)
+		{
+			authenticationService = authService;
+			errandService = errService;
+			errandStatusService = errStatService;
+		}
 
-        public ViewResult StartInvestigator()
-        {
-            return View(repository);
-        }
+		public ViewResult StartInvestigator(SearchQueryDto searchQuery)
+		{
+			ViewBag.Statuses = errandStatusService.GetAll();
+			LimitSearchToRole(searchQuery);
+			return View(searchQuery);
+		}
 
         public ViewResult CrimeInvestigator(int errandId)
-        {
-            ViewBag.ErrandId = errandId;
-            return View(repository.ErrandStatuses);
-        }
+		{
+			ViewBag.ErrandId = errandId;
+			ViewBag.Statuses = errandStatusService.GetAll();
+			return View();
+		}
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateCrime(int errandId, string selectedStatusId, string events, string information, IFormFile loadSample, IFormFile loadImage)
+		[HttpPost]
+		public async Task<IActionResult> UpdateCrime(ErrandUpdateDto dto)
+		{
+			await errandService.UpdateErrand(dto);
+			return RedirectToAction("CrimeInvestigator", new { dto.ErrandId });
+		}
+
+        private void LimitSearchToRole(SearchQueryDto searchQuery)
         {
-            await repository.UpdateErrandData(errandId, selectedStatusId, events, information, loadSample, loadImage);
-            return RedirectToAction("CrimeInvestigator", new { errandId });
+            searchQuery.EmployeeId = authenticationService.GetLoggedInEmployeeId();
         }
     }
 }

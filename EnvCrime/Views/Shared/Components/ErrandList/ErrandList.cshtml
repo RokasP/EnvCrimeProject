@@ -1,0 +1,33 @@
+﻿@model IQueryable<ErrandDto>
+
+<!--Nedan ser man en lista på ärenden-->
+<table>
+    <tr>
+        <th>Ärende anmält</th>
+        <th>Ärendenummer</th>
+        <th>Miljöbrott</th>
+        <th>Status</th>
+        <th>Avdelning</th>
+        <th>Handläggare</th>
+    </tr>
+    @if (Model.Count() > 0)
+    {
+        @foreach (var errand in Model)
+        {
+            <tr>
+                <td>@errand.DateOfObservation.ToShortDateString()</td>
+                <td><a asp-controller=@ViewBag.RoleTitle asp-action=@($"Crime{ViewBag.RoleTitle}") asp-route-errandId="@errand.ErrandId">@errand.RefNumber</a></td>
+                <td>@errand.TypeOfCrime</td>
+                <td>@errand.StatusName</td>
+                <td>@errand.DepartmentName</td>
+                <td>@errand.EmployeeName</td>
+            </tr>
+        }
+    }
+</table>
+@if (Model.Count() == 0)
+{
+    <p style="text-align:center">
+        <i>Inga ärenden hittats</i>
+    </p>
+}

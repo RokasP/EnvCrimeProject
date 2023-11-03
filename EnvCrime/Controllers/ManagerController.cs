@@ -1,4 +1,6 @@
-﻿using EnvCrime.Models;
+﻿using EnvCrime.Infrastructure.Services;
+using EnvCrime.Infrastructure.Shared.Helpers;
+using EnvCrime.Models.dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,43 +9,51 @@ namespace EnvCrime.Controllers
     [Authorize(Roles = "Manager")]
     public class ManagerController : Controller
     {
+        private readonly ErrandService errandService;
+        private readonly ErrandStatusService errandStatusService;
+        private readonly EmployeeService employeeService;
+        private readonly AuthenticationHelperService authenticationService;
 
-        private readonly IEnvCrimeRepository repository;
-
-        public ManagerController(IEnvCrimeRepository repo)
+        public ManagerController(ErrandService errService, ErrandStatusService errStatService, EmployeeService empService, AuthenticationHelperService authService)
         {
-            repository = repo;
+            errandService = errService;
+            errandStatusService = errStatService;
+            employeeService = empService;
+            authenticationService = authService;
         }
 
-        public ViewResult StartManager()
+        public ViewResult StartManager(SearchQueryDto searchQuery)
         {
-            return View(repository);
+            ViewBag.Statuses = errandStatusService.GetAll();
+            ViewBag.Employees = employeeService.Search(employee => employee.DepartmentId == authenticationService.GetLoggedInEmployee().DepartmentId);
+            LimitSearchToRole(searchQuery);
+            return View(searchQuery);
         }
 
         public ViewResult CrimeManager(int errandId)
         {
             ViewBag.ErrandId = errandId;
-            return View(repository.ManagerEmployees);
+            ViewBag.Employees = employeeService.Search(employee => employee.DepartmentId == authenticationService.GetLoggedInEmployee().DepartmentId);
+            return View();
         }
 
         [HttpPost]
-        public IActionResult UpdateCrime(int errandId, string selectedEmployeeId, bool noAction, string reason)
+        public async Task<IActionResult> UpdateCrime(ErrandUpdateDto dto)
         {
-            if (noAction)
+            if (dto.NoAction)
             {
-                if (!string.IsNullOrWhiteSpace(reason))
-                {
-                    repository.SetErrandNoAction(errandId, reason);
-                }
+                errandService.SetNoAction(dto);
             }
             else
             {
-                if (!string.IsNullOrWhiteSpace(selectedEmployeeId))
-                {
-                    repository.UpdateErrandEmployee(errandId, selectedEmployeeId);
-                }
+                await errandService.UpdateErrand(dto);
             }
-            return RedirectToAction("CrimeManager", new { errandId });
+            return RedirectToAction("CrimeManager", new { dto.ErrandId });
+        }
+
+        private void LimitSearchToRole(SearchQueryDto searchQuery)
+        {
+            searchQuery.DepartmentId = authenticationService.GetLoggedInEmployee().DepartmentId;
         }
     }
 }

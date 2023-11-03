@@ -17,5 +17,9 @@
 		public IFormFile SampleFile { get; set; }
 
 		public IFormFile ImageFile { get; set; }
+
+		public bool NoAction { get; set; }
+
+		public String NoActionReason { get; set; }
 	}
 }

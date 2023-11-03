@@ -1,11 +1,11 @@
-﻿using EnvCrime.Infrastructure;
+﻿using EnvCrime.Infrastructure.Shared.Helpers;
 using EnvCrime.Models.poco;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnvCrime.Controllers
 {
-	public class HomeController : Controller
+    public class HomeController : Controller
 	{		
 		private readonly UserManager<IdentityUser> userManager;
 		private readonly SignInManager<IdentityUser> signInManager;
