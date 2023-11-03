@@ -25,7 +25,7 @@ namespace EnvCrime.Controllers
         public ViewResult StartManager(SearchQueryDto searchQuery)
         {
             ViewBag.Statuses = errandStatusService.GetAll();
-            ViewBag.Employees = employeeService.Search(employee => employee.DepartmentId == authenticationService.GetLoggedInEmployee().DepartmentId);
+            ViewBag.Employees = employeeService.SearchByDepartment(authenticationService.GetLoggedInEmployee().DepartmentId);
             LimitSearchToRole(searchQuery);
             return View(searchQuery);
         }
@@ -33,7 +33,7 @@ namespace EnvCrime.Controllers
         public ViewResult CrimeManager(int errandId)
         {
             ViewBag.ErrandId = errandId;
-            ViewBag.Employees = employeeService.Search(employee => employee.DepartmentId == authenticationService.GetLoggedInEmployee().DepartmentId);
+            ViewBag.Employees = employeeService.SearchByDepartment(authenticationService.GetLoggedInEmployee().DepartmentId);
             return View();
         }
 

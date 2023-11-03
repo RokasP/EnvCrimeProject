@@ -99,7 +99,7 @@ namespace EnvCrime.Infrastructure.Services
             }
             if (!string.IsNullOrWhiteSpace(dto.StatusId))
             {
-                errand.StatusId= dto.StatusId;
+                errand.StatusId = dto.StatusId;
             }
             if (!string.IsNullOrWhiteSpace(dto.Events))
             {
