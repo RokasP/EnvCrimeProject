@@ -64,6 +64,13 @@ namespace EnvCrime.Models
                 context.Employees.AddRange(
             new Employee
             {
+                EmployeeId = "E000",
+                EmployeeName = "Lisa Ekdahl",
+                RoleTitle = "Administrator",
+                DepartmentId = "D00"
+            },
+            new Employee
+            {
                 EmployeeId = "E001",
                 EmployeeName = "Östen Ärling",
                 RoleTitle = "Coordinator",

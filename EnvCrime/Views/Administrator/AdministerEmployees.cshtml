@@ -1,0 +1,68 @@
+﻿@model EmployeeSearchQuery
+
+@{
+    Layout = "_Staff";
+}
+
+<h2>Anställda</h2>
+<p class="info">Du är inloggad som administratör</p>
+<span><a class="button right" asp-controller="Administrator" asp-action="EditEmployee" asp-route-employeeId="0">Lägg till</a></span>
+
+<table id="managerForm">
+    <tr>
+        <td class="label">Id:</td>
+        <td class="label">Namn:</td>
+        <td class="label">Välj roll:</td>
+        <td class="label">Välj avdelning:</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <form method="post" asp-controller="Administrator" asp-action="AdministerEmployees">
+            <td><input asp-for="EmployeeId" /></td>
+            <td><input asp-for="EmployeeName" /></td>
+            <td>
+                <select asp-for="RoleTitle" asp-items="@(new SelectList(ViewBag.Roles, "Name", "Name"))">
+                    <option selected value="">Välj alla</option>
+                </select>
+            </td>
+            <td>
+                <select asp-for="DepartmentId" asp-items="@(new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"))">
+                    <option selected value="">Välj alla</option>
+                </select>
+            </td>
+            <td><input class="button" type="submit" value="Sök" /></td>
+        </form>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Namn</th>
+        <th>Rollnamn</th>
+        <th>Avdelning Id</th>
+        <th></th>
+    </tr>
+    @if (ViewBag.ResultsExist)
+    {
+        @foreach (var employee in ViewBag.Employees)
+        {
+            <tr>
+                <td>@employee.EmployeeId</td>
+                <td>@employee.EmployeeName</td>
+                <td>@employee.RoleTitle</td>
+                <td>@employee.DepartmentName</td>
+                <td>
+                    <a asp-controller="Administrator" asp-action="EditEmployee" asp-route-employeeId="@employee.EmployeeId"><img src="../images/edit.png" height="16" width="16" /></a>
+                    <a asp-controller="Administrator" asp-action="DeleteEmployee" asp-route-employeeId="@employee.EmployeeId"><img src="../images/delete.png" height="16" width="16" /></a>
+                </td>
+            </tr>
+        }
+    }
+</table>
+@if (!ViewBag.ResultsExist)
+{
+    <p style="text-align:center">
+        <i>Inga anställda finns</i>
+    </p>
+}

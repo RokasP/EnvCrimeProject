@@ -1,7 +1,7 @@
 ﻿namespace EnvCrime.Infrastructure.Shared.Generics
 {
-    public abstract class GenericEntity
+    public abstract class GenericEntity<U>
     {
-        public abstract bool IsNew();
+        public abstract U GetId();
     }
 }

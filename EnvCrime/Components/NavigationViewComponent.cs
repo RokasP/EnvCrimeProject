@@ -15,7 +15,7 @@ namespace EnvCrime.Components
         public IViewComponentResult Invoke()
         {
             var roleName = repository.GetLoggedInUser().RoleTitle;
-            if (roleName != "Investigator" && roleName != "Coordinator" && roleName != "Manager")
+            if (roleName != "Investigator" && roleName != "Coordinator" && roleName != "Manager" && roleName != "Administrator")
             {
                 throw new ArgumentException("Invalid role name passed to the Navigation ViewComponent");
             }

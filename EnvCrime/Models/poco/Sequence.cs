@@ -2,15 +2,15 @@
 
 namespace EnvCrime.Models.poco
 {
-    public class Sequence : GenericEntity
+    public class Sequence : GenericEntity<int>
     {
         public int Id { get; set; }
 
         public int CurrentValue { get; set; }
 
-		public override bool IsNew()
-		{
-			return Id == 0;
-		}
-	}
+        public override int GetId()
+        {
+            return Id;
+        }
+    }
 }

@@ -1,0 +1,45 @@
+﻿@model Employee
+
+@{
+    Layout = "_Staff";
+}
+
+<h2>Detaljer för anställd: @(ViewBag.NewEmployee ? "ny anställd" : Model.EmployeeId)</h2>
+<p class="info">Du är inloggad som administratör</p>
+
+<form method="post" asp-controller="Administrator" asp-action="SaveEmployee">
+    <p>
+        <label asp-for="EmployeeId" class="label">Id:</label><br />
+        @if (ViewBag.NewEmployee)
+        {
+            <input asp-for="EmployeeId" />
+        }
+        else
+        {
+            <input asp-for="EmployeeId" readonly value="@Model.EmployeeId" />
+        }
+        <span asp-validation-for="EmployeeId" style="color: orange"></span>
+    </p>
+    <p>
+        <label asp-for="EmployeeName" class="label">Namn:</label><br />
+        <input asp-for="EmployeeName" />
+        <span asp-validation-for="EmployeeName" style="color: orange"></span>
+    </p>
+    <p>
+        <label asp-for="RoleTitle" class="label">Roll:</label><br />
+        <select asp-for="RoleTitle" asp-items="@(new SelectList(ViewBag.Roles, "Name", "Name"))">
+            <option selected value="">Välj</option>
+        </select>
+        <span asp-validation-for="RoleTitle" style="color: orange"></span>
+    </p>
+    <p>
+        <label asp-for="DepartmentId" class="label">Avdelning:</label><br />
+        <select asp-for="DepartmentId" asp-items="@(new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"))">
+            <option selected value="">Välj</option>
+        </select>
+        <span asp-validation-for="DepartmentId" style="color: orange"></span>
+    </p>
+    <p>
+        <input class="button" type="submit" value="Spara" />
+    </p>
+</form>

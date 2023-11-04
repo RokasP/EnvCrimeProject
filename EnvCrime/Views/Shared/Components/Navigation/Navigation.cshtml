@@ -1,9 +1,18 @@
 ﻿<nav>
     <ul>
-        <li><a class="reports" asp-controller=@ViewBag.ControllerName asp-action=@ViewBag.StartActionName>Start (Ärenden)</a></li>
-        @if (ViewBag.ControllerName == "Coordinator")
+        @if (ViewBag.ControllerName != "Administrator")
         {
-            <li><a class="reportAdd" asp-controller="Coordinator" asp-action="ReportCrime">Rapportera brott</a></li>
+            <li><a class="reports" asp-controller=@ViewBag.ControllerName asp-action=@ViewBag.StartActionName>Start (Ärenden)</a></li>
+            @if (ViewBag.ControllerName == "Coordinator")
+            {
+                <li><a class="reportAdd" asp-controller="Coordinator" asp-action="ReportCrime">Rapportera brott</a></li>
+            }
+        }
+        else
+        {
+            <li><a asp-controller="Administrator" asp-action="AdministerStatuses">Statuser</a></li>
+            <li><a asp-controller="Administrator" asp-action="AdministerDepartments">Avdelningar</a></li>
+            <li><a asp-controller="Administrator" asp-action="AdministerEmployees">Anställda</a></li>
         }
         <li class="right"><a class="logout" asp-controller="Home" asp-action="Logout">Logga ut</a></li>
     </ul>

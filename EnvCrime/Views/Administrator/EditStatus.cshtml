@@ -1,0 +1,31 @@
+﻿@model ErrandStatus
+
+@{
+    Layout = "_Staff";
+}
+
+<h2>Detaljer för status: @(ViewBag.NewStatus ? "ny status" : Model.StatusId)</h2>
+<p class="info">Du är inloggad som administratör</p>
+
+<form method="post" asp-controller="Administrator" asp-action="SaveChanges">
+    <p>
+        <label asp-for="StatusId" class="label">Id:</label><br />
+        @if (ViewBag.NewStatus)
+        {
+            <input asp-for="StatusId" />
+        }
+        else
+        {
+            <input asp-for="StatusId" readonly value="@Model.StatusId" />
+        }
+        <span asp-validation-for="StatusId" style="color: orange"></span>
+    </p>
+    <p>
+        <label asp-for="StatusName" class="label">Namn:</label><br />
+        <input asp-for="StatusName" />
+        <span asp-validation-for="StatusName" style="color: orange"></span>
+    </p>
+    <p>
+        <input class="button" type="submit" value="Spara" />
+    </p>
+</form>

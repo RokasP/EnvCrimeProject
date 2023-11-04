@@ -2,7 +2,7 @@
 
 namespace EnvCrime.Models.poco
 {
-    public class Picture : GenericEntity
+    public class Picture : GenericEntity<int>
     {
         public int PictureId { get; set; }
 
@@ -10,9 +10,9 @@ namespace EnvCrime.Models.poco
 
         public int ErrandId { get; set; }
 
-		public override bool IsNew()
-		{
-			return PictureId == 0;
-		}
-	}
+        public override int GetId()
+        {
+            return PictureId;
+        }
+    }
 }

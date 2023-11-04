@@ -10,7 +10,7 @@ namespace EnvCrime.Infrastructure.Shared.Generics
 	 * U = [int, string, string, string, int, int, int]
 	 * 
 	 */
-    public interface IRepository<T, U> where T : GenericEntity
+    public interface IRepository<T, U> where T : GenericEntity<U>
     {
         public T GetById(U id);
         public IQueryable<T> GetAll();

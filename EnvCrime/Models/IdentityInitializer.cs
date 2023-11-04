@@ -13,9 +13,13 @@ namespace EnvCrime.Models
             await CreateUsers(userManager);
         }
 
-		private static async Task CreateRoles(RoleManager<IdentityRole> roleManager)
-		{
-			if (!await roleManager.RoleExistsAsync("Investigator"))
+        private static async Task CreateRoles(RoleManager<IdentityRole> roleManager)
+        {
+            if (!await roleManager.RoleExistsAsync("Administrator"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Administrator"));
+            }
+            if (!await roleManager.RoleExistsAsync("Investigator"))
             {
                 await roleManager.CreateAsync(new IdentityRole("Investigator"));
             }
@@ -27,10 +31,11 @@ namespace EnvCrime.Models
             {
                 await roleManager.CreateAsync(new IdentityRole("Manager"));
             }
-		}
+        }
 
-		private static async Task CreateUsers(UserManager<IdentityUser> userManager)
+        private static async Task CreateUsers(UserManager<IdentityUser> userManager)
         {
+            IdentityUser E000 = new IdentityUser("E000");
             IdentityUser E001 = new IdentityUser("E001");
             IdentityUser E100 = new IdentityUser("E100");
             IdentityUser E101 = new IdentityUser("E101");
@@ -53,6 +58,7 @@ namespace EnvCrime.Models
             IdentityUser E502 = new IdentityUser("E502");
             IdentityUser E503 = new IdentityUser("E503");
 
+            await userManager.CreateAsync(E000, "Pass00?");
             await userManager.CreateAsync(E001, "Pass01?");
             await userManager.CreateAsync(E100, "Pass02?");
             await userManager.CreateAsync(E101, "Pass03?");
@@ -75,6 +81,7 @@ namespace EnvCrime.Models
             await userManager.CreateAsync(E502, "Pass20?");
             await userManager.CreateAsync(E503, "Pass21?");
 
+            await userManager.AddToRoleAsync(E000, "Administrator");
             await userManager.AddToRoleAsync(E001, "Coordinator");
             await userManager.AddToRoleAsync(E100, "Manager");
             await userManager.AddToRoleAsync(E101, "Investigator");

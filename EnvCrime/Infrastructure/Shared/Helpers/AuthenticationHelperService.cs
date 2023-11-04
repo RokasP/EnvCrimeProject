@@ -1,17 +1,21 @@
-﻿using EnvCrime.Models;
+﻿using EnvCrime.Infrastructure.Services;
+using EnvCrime.Models;
 using EnvCrime.Models.poco;
+using Microsoft.AspNetCore.Identity;
 
 namespace EnvCrime.Infrastructure.Shared.Helpers
 {
     public class AuthenticationHelperService
     {
         private readonly IHttpContextAccessor httpContext;
-        private readonly IEnvCrimeRepository repository;
+        private readonly AppIdentityDbContext identityContext;
+        private readonly EmployeeService employeeService;
 
-        public AuthenticationHelperService(IHttpContextAccessor httpCtx, IEnvCrimeRepository repo)
+        public AuthenticationHelperService(IHttpContextAccessor httpCtx, AppIdentityDbContext appIdCtx, EmployeeService empService)
         {
             httpContext = httpCtx;
-            repository = repo;
+            identityContext = appIdCtx;
+            employeeService = empService;
         }
 
         public string GetLoggedInEmployeeId()
@@ -21,12 +25,17 @@ namespace EnvCrime.Infrastructure.Shared.Helpers
 
         public Employee GetLoggedInEmployee()
         {
-            return repository.GetEmployee(GetLoggedInEmployeeId());
+            return employeeService.GetById(GetLoggedInEmployeeId());
         }
 
         public string GetLoggedInEmployeeRoleTitle()
         {
             return GetLoggedInEmployee().RoleTitle;
+        }
+
+        public IQueryable<IdentityRole> GetRoles()
+        {
+            return identityContext.Roles;
         }
     }
 }

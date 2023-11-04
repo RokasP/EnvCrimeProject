@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace EnvCrime.Infrastructure.Shared.Generics
 {
-    public class GenericRepository<T, U> : IRepository<T, U> where T : GenericEntity
+    public class GenericRepository<T, U> : IRepository<T, U> where T : GenericEntity<U>
     {
         private readonly ApplicationDbContext dbContext;
 
@@ -27,7 +27,7 @@ namespace EnvCrime.Infrastructure.Shared.Generics
         public T Save(T entity)
         {
             BeforeSave(entity);
-            if (entity.IsNew())
+            if (GetById(entity.GetId()) == null)
             {
                 BeforeInitialSave(entity);
                 dbContext.Set<T>().Add(entity);
@@ -45,6 +45,7 @@ namespace EnvCrime.Infrastructure.Shared.Generics
                 throw new Exception($"Kan ej hitta objektet med id = {id} för att ta bort det");
             }
             dbContext.Remove(entity);
+            dbContext.SaveChanges();
         }
 
         protected virtual void BeforeInitialSave(T entity) { }

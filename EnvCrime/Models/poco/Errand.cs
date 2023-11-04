@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EnvCrime.Models.poco
 {
-    public class Errand : GenericEntity
+    public class Errand : GenericEntity<int>
     {
         public int ErrandId { get; set; }
 
@@ -42,9 +42,9 @@ namespace EnvCrime.Models.poco
 
         public ICollection<Picture> Pictures { get; set; }
 
-		public override bool IsNew()
-		{
-			return ErrandId == 0;
-		}
-	}
+        public override int GetId()
+        {
+            return ErrandId;
+        }
+    }
 }
