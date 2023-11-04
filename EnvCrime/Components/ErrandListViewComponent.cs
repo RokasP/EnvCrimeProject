@@ -1,5 +1,4 @@
 ﻿using EnvCrime.Infrastructure.Services;
-using EnvCrime.Infrastructure.Shared.Helpers;
 using EnvCrime.Models.dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,13 +6,13 @@ namespace EnvCrime.Components
 {
     public class ErrandListViewComponent : ViewComponent
     {
-        private readonly AuthenticationHelperService authenticationService;
         private readonly ErrandService errandService;
+        private readonly EmployeeService employeeService;
 
-        public ErrandListViewComponent(AuthenticationHelperService authHelper, ErrandService errService)
+        public ErrandListViewComponent(ErrandService errService, EmployeeService empService)
         {
-            authenticationService = authHelper;
             errandService = errService;
+            employeeService = empService;
         }
 
         public IViewComponentResult Invoke(SearchQueryDto dto)
@@ -21,7 +20,7 @@ namespace EnvCrime.Components
             ClearEmptyStrings(dto);
 
             var errandDtos = errandService.Search(dto);
-            ViewBag.RoleTitle = authenticationService.GetLoggedInEmployeeRoleTitle();
+            ViewBag.RoleTitle = employeeService.GetLoggedInEmployeeRoleTitle();
             
             return View("ErrandList", errandDtos);
         }

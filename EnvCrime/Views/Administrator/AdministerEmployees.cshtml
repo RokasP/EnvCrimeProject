@@ -35,16 +35,16 @@
     </tr>
 </table>
 
-<table>
-    <tr>
-        <th>Id</th>
-        <th>Namn</th>
-        <th>Rollnamn</th>
-        <th>Avdelning Id</th>
-        <th></th>
-    </tr>
-    @if (ViewBag.ResultsExist)
-    {
+@if (ViewBag.ResultsExist)
+{
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Namn</th>
+            <th>Rollnamn</th>
+            <th>Avdelning Id</th>
+            <th></th>
+        </tr>
         @foreach (var employee in ViewBag.Employees)
         {
             <tr>
@@ -58,8 +58,9 @@
                 </td>
             </tr>
         }
-    }
-</table>
+
+    </table>
+}
 @if (!ViewBag.ResultsExist)
 {
     <p style="text-align:center">

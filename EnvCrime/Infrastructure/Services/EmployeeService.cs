@@ -1,4 +1,5 @@
 ﻿using EnvCrime.Infrastructure.Shared.Generics;
+using EnvCrime.Infrastructure.Shared.Helpers;
 using EnvCrime.Models;
 using EnvCrime.Models.dto;
 using EnvCrime.Models.poco;
@@ -8,11 +9,23 @@ namespace EnvCrime.Infrastructure.Services
 {
     public class EmployeeService : GenericRepository<Employee, string>
     {
+        private readonly AuthenticationHelperService authenticationService;
         private readonly DepartmentService departmentService;
 
-        public EmployeeService(ApplicationDbContext dbCtx, DepartmentService deptService) : base(dbCtx)
+        public EmployeeService(ApplicationDbContext dbCtx, AuthenticationHelperService authService, DepartmentService deptService) : base(dbCtx)
         {
+            authenticationService = authService;
             departmentService = deptService;
+        }
+        
+        public Employee GetLoggedInEmployee()
+        {
+            return GetById(authenticationService.GetLoggedInEmployeeId());
+        }
+
+        public string GetLoggedInEmployeeRoleTitle()
+        {
+            return GetLoggedInEmployee().RoleTitle;
         }
 
         public IQueryable<Employee> SearchByDepartment(string departmentId)
@@ -46,7 +59,17 @@ namespace EnvCrime.Infrastructure.Services
 
             return MapToDtos(Search(predicate));
         }
-        
+
+        public async Task AddUserIdentity(Employee entity)
+        {
+            await authenticationService.AddUser(entity);
+        }
+
+        public async Task RemoveUserIdentity(Employee employee)
+        {
+            await authenticationService.RemoveUser(employee);
+        }
+
         private IQueryable<EmployeeDto> MapToDtos(IQueryable<Employee> employees)
         {
             return from e in employees

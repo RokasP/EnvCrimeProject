@@ -27,9 +27,18 @@
     </p>
     <p>
         <label asp-for="RoleTitle" class="label">Roll:</label><br />
-        <select asp-for="RoleTitle" asp-items="@(new SelectList(ViewBag.Roles, "Name", "Name"))">
-            <option selected value="">Välj</option>
-        </select>
+        @if (ViewBag.NewEmployee)
+        {
+            <select asp-for="RoleTitle" asp-items="@(new SelectList(ViewBag.Roles, "Name", "Name"))">
+                <option selected value="">Välj</option>
+            </select>
+        }
+        else
+        {
+            <select asp-for="RoleTitle" asp-items="@(new SelectList(ViewBag.Roles, "Name", "Name"))" disabled>
+                <option selected value="">Välj</option>
+            </select>
+        }
         <span asp-validation-for="RoleTitle" style="color: orange"></span>
     </p>
     <p>

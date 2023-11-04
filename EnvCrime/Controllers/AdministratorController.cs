@@ -119,7 +119,7 @@ namespace EnvCrime.Controllers
             return View("EditEmployee", emp);
         }
 
-        public IActionResult SaveEmployee(Employee employee)
+        public async Task<IActionResult> SaveEmployee(Employee employee)
         {
             var emp = employeeService.GetById(employee.EmployeeId);
             if (emp != null)
@@ -132,12 +132,14 @@ namespace EnvCrime.Controllers
             else
             {
                 employeeService.Save(employee);
+                await employeeService.AddUserIdentity(employee);
             }
             return RedirectToAction("AdministerEmployees");
         }
 
-        public IActionResult DeleteEmployee(String employeeId)
+        public async Task<IActionResult> DeleteEmployee(String employeeId)
         {
+            await employeeService.RemoveUserIdentity(employeeService.GetById(employeeId));
             employeeService.DeleteById(employeeId);
             return RedirectToAction("AdministerEmployees");
         }
