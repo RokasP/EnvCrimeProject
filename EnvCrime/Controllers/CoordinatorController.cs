@@ -54,7 +54,7 @@ namespace EnvCrime.Controllers
 		public ViewResult Thanks()
 		{
 			var errand = HttpContext.Session.Get<Errand>("NewErrandCoordinator"); // borde normalt finnas
-			ViewBag.RefNumber = errandService.Save(errand);
+			ViewBag.RefNumber = errandService.Save(errand).RefNumber;
 			HttpContext.Session.Remove("NewErrandCoordinator");
 			return View();
 		}
