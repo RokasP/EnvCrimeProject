@@ -21,7 +21,7 @@ namespace EnvCrime.Controllers
 			errandStatusService = errStatService;
 		}
 
-		public ViewResult StartCoordinator(SearchQueryDto searchQuery)
+		public ViewResult StartCoordinator(ErrandSearchQueryDto searchQuery)
 		{
             ViewBag.Statuses = errandStatusService.GetAll();
             ViewBag.Departments = departmentService.GetAll();

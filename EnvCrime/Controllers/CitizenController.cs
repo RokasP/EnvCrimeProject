@@ -1,5 +1,5 @@
-﻿using EnvCrime.Infrastructure.Shared.Helpers;
-using EnvCrime.Models;
+﻿using EnvCrime.Infrastructure.Services;
+using EnvCrime.Infrastructure.Shared.Helpers;
 using EnvCrime.Models.poco;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,11 +7,11 @@ namespace EnvCrime.Controllers
 {
     public class CitizenController : Controller
     {
-		private readonly IEnvCrimeRepository repository;
+		private readonly ErrandService errandService;
 
-		public CitizenController(IEnvCrimeRepository repo)
+		public CitizenController(ErrandService errService)
 		{
-			repository = repo;
+			errandService = errService;
 		}
 
 		public ViewResult Services()
@@ -38,7 +38,7 @@ namespace EnvCrime.Controllers
 		public ViewResult Thanks()
 		{
 			var errand = HttpContext.Session.Get<Errand>("NewErrandCitizen"); // borde normalt finnas
-            ViewBag.RefNumber = repository.SaveErrand(errand);
+            ViewBag.RefNumber = errandService.Save(errand).RefNumber;
 			HttpContext.Session.Remove("NewErrandCitizen");
 			return View();
 		}

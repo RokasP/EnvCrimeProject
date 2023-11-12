@@ -4,28 +4,24 @@ using EnvCrime.Models;
 using EnvCrime.Models.dto;
 using EnvCrime.Models.poco;
 using LinqKit;
-using System.Data.Entity;
 
 namespace EnvCrime.Infrastructure.Services
 {
-	public class ErrandService : GenericRepository<Errand, int>
+    public class ErrandService : GenericRepository<Errand, int>
     {
-		private static string EXCLUDED_DEPARTMENT_CHOICE = "D00";
+		private static readonly string EXCLUDED_DEPARTMENT_CHOICE = "D00";
 
 		private readonly Utilities utilities;
-        private readonly AuthenticationHelperService authenticationService;
         private readonly SequenceService sequenceService;
         private readonly DepartmentService departmentService;
         private readonly EmployeeService employeeService;
         private readonly ErrandStatusService errandStatusService;
         private readonly SampleService sampleService;
 		private readonly PictureService pictureService;
-		public ErrandService(ApplicationDbContext dbCtx, Utilities utils, AuthenticationHelperService authHelper, SequenceService seqService, DepartmentService deptService,
-            EmployeeService empService,
-            ErrandStatusService errStatService, SampleService sampService, PictureService pictService) : base(dbCtx)
+		public ErrandService(ApplicationDbContext dbCtx, Utilities utils, SequenceService seqService, DepartmentService deptService,
+            EmployeeService empService, ErrandStatusService errStatService, SampleService sampService, PictureService pictService) : base(dbCtx)
         {
             utilities = utils;
-            authenticationService = authHelper;
             sequenceService = seqService;
             departmentService = deptService;
             employeeService = empService;
@@ -40,7 +36,31 @@ namespace EnvCrime.Infrastructure.Services
             entity.StatusId = "S_A";
         }
 
-        public IQueryable<ErrandDto> Search(SearchQueryDto query)
+        /*
+         * Man undersöker query-objektet (se ErrandSearchQueryDto för mer information) för att se vilka sökningskriterier
+         * som användaren har valt (fyllt i på formuläret). För varje icke-null sökningskriterium läggs till ett 
+         * lambda-uttryck som beskriver hur man ska utföra sökningen utifrån det kriteriet.
+         * 
+         * T. ex. har man valt att söka på referensnummer, används string.StartsWith() metoden som letar efter matchningar av angivna
+         * fragmentet i början av ärendenamn. Man kan enkelt byta ut det här sökningssättet genom att i stället anropa t. ex. string.
+         * Contains() eller string.EndsWith().
+         * 
+         * Överhuvudtaget, om man vill införa ett nytt sökningskriterium behöver man göra tre saker:
+         * * lägga till motsvarande egenskap på ErrandSearchQueryDto
+         * * i en vy med sökningsformuläret lägga till ett nytt inmatningsfält, göra en koppling till egenskapen i dto-klassen
+         * * lägga till en ny if-sats med ett predikat på Search-metoden (här).
+         * 
+         * T. ex. vill man ha ett sökningskriterium som tillåter att söka ärenden med bilder ska man:
+         * * lägga till "public bool HasImages { get; set; }" på ErrandSearchQueryDto
+         * * fixa till formuläret (kanske introducera en checkbox som sedan kopplas med "HasImages")
+         * * lägga till
+         * 
+         * if (query.HasImages) {
+         *      predicate.And(errand => errand.Pictures.Count() > 0);
+         * }
+         * 
+         */
+        public IQueryable<ErrandDto> Search(ErrandSearchQueryDto query)
         {
             var predicate = PredicateBuilder.New<Errand>(true);
 
@@ -68,10 +88,12 @@ namespace EnvCrime.Infrastructure.Services
 
         public Errand GetByIdWithMedia(int id)
         {
-            return GetAll().Where(errand => errand.ErrandId == id)
-                .Include(errand => errand.Samples)
-                .Include(errand => errand.Pictures)
-                .First();
+            var errand = GetById(id);
+            var samples = sampleService.Search(sample => sample.ErrandId == id).ToList();
+            var pictures = pictureService.Search(picture => picture.ErrandId == id).ToList();
+            errand.Samples = samples;
+            errand.Pictures = pictures;
+            return errand;
         }
 
         public void SetNoAction(ErrandUpdateDto dto)

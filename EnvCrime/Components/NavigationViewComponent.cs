@@ -1,20 +1,20 @@
-﻿using EnvCrime.Models;
+﻿using EnvCrime.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnvCrime.Components
 {
     public class NavigationViewComponent : ViewComponent
     {
-        private readonly IEnvCrimeRepository repository;
+        private readonly EmployeeService employeeService;
 
-        public NavigationViewComponent(IEnvCrimeRepository repo)
+        public NavigationViewComponent(EmployeeService empService)
         {
-            repository = repo;
+            employeeService = empService;
         }
 
         public IViewComponentResult Invoke()
         {
-            var roleName = repository.GetLoggedInUser().RoleTitle;
+            var roleName = employeeService.GetLoggedInEmployeeRoleTitle();
             if (roleName != "Investigator" && roleName != "Coordinator" && roleName != "Manager" && roleName != "Administrator")
             {
                 throw new ArgumentException("Invalid role name passed to the Navigation ViewComponent");

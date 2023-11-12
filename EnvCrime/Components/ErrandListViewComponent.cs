@@ -15,7 +15,7 @@ namespace EnvCrime.Components
             employeeService = empService;
         }
 
-        public IViewComponentResult Invoke(SearchQueryDto dto)
+        public IViewComponentResult Invoke(ErrandSearchQueryDto dto)
         {
             ClearEmptyStrings(dto);
 
@@ -25,7 +25,7 @@ namespace EnvCrime.Components
             return View("ErrandList", errandDtos);
         }
 
-        private void ClearEmptyStrings(SearchQueryDto dto)
+        private void ClearEmptyStrings(ErrandSearchQueryDto dto)
         {
             if (dto == null) return;
 

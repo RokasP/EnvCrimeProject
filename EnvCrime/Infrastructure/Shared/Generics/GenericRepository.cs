@@ -4,6 +4,13 @@ using System.Linq.Expressions;
 
 namespace EnvCrime.Infrastructure.Shared.Generics
 {
+    /*
+     * Skapa en ny service-klass för varje poco-klass du vill hantera i applikationen och låt servicen ärva ifrån den här generiska repo-klassen.
+     * På så sätt får din service-klass tillgång till allmänna CRUD-metoder och du kan sedan även lägga till logik som är specifik för din poco-klass.
+     
+     * Service-klasserna får registreras som serivces i filen Program.cs (där finner du exempel på hur man gör) och kan efteråt injiceras till kontrollers,
+     * vy-komponenter eller på andra ställen i kodbasen.
+     */
     public class GenericRepository<T, U> : IRepository<T, U> where T : GenericEntity<U>
     {
         private readonly ApplicationDbContext dbContext;

@@ -10,10 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
-builder.Services.AddTransient<IEnvCrimeRepository, EFRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
 
+// Registrera poco-klass services som du skapar här för att möjliggöra att injicera dem i till klasser där du behöver dem.
 builder.Services.AddScoped(typeof(IRepository<,>), typeof(GenericRepository<,>));
 builder.Services.AddScoped<Utilities>();
 builder.Services.AddScoped<AuthenticationHelperService>();

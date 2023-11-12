@@ -21,7 +21,7 @@ namespace EnvCrime.Controllers
 			errandStatusService = errStatService;
 		}
 
-		public ViewResult StartInvestigator(SearchQueryDto searchQuery)
+		public ViewResult StartInvestigator(ErrandSearchQueryDto searchQuery)
 		{
 			ViewBag.Statuses = errandStatusService.GetAll();
 			LimitSearchToRole(searchQuery);
@@ -42,7 +42,7 @@ namespace EnvCrime.Controllers
 			return RedirectToAction("CrimeInvestigator", new { dto.ErrandId });
 		}
 
-        private void LimitSearchToRole(SearchQueryDto searchQuery)
+        private void LimitSearchToRole(ErrandSearchQueryDto searchQuery)
         {
             searchQuery.EmployeeId = authenticationService.GetLoggedInEmployeeId();
         }
